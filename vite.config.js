@@ -5,7 +5,7 @@ import glsl from 'vite-plugin-glsl';
 
 export default defineConfig({
 	plugins: [sveltekit(), glsl()],
-	build: { chunkSizeWarningLimit: 1900 },
+	build: { chunkSizeWarningLimit: 300 },
 	server: {
 		port: 3000,
 		proxy: {

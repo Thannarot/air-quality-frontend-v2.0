@@ -5,7 +5,18 @@ import glsl from 'vite-plugin-glsl';
 
 export default defineConfig({
 	plugins: [sveltekit(), glsl()],
-	build: { chunkSizeWarningLimit: 100 },
+	build:  {
+		minify: false,
+		rollupOptions: {
+		output: {
+			manualChunks: (id) => {
+	// +         if (id.includes('commonjsHelpers')) return 'commonjsHelpers'
+			if (id.includes('apexcharts')) return 'charts'
+			if (id.includes('node_modules')) return 'vendor'
+			},
+		}
+		}
+	},
 	server: {
 		port: 3000,
 		proxy: {

@@ -1,0 +1,35 @@
+@import url("https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap");
+@import url(fix-bootstrap.css);
+@import url(../js/select2/css/select2.min.css);
+@import url(fix-slick.css);
+@import url(fix-select2.css);
+@import url(general.css);
+@import url(color.css);
+@import url(font.css);
+@import url(button.css);
+@import url(form.css);
+@import url(popup.css);
+@import url(layout.css);
+@import url(template.css);
+:root{
+    --blue-100:#d0dcf0;
+    --blue-300:#6f96d1;
+    --blue-400:#344ead;
+    --blue-600:#091f5b;
+    --grey:#8592a3;
+    --green:#00e9af;
+    --font:"Kanit",sans-serif;
+    --text-xs:12px;
+    --text-2sm:13px;
+    --text-sm:14px;
+    --text-base:16px;
+    --text-lg:18px;
+    --text-xl:20px;
+    --text-2xl:22px;
+    --text-3xl:24px;
+    --text-4xl:26px;
+    --text-5xl:30px;
+    --text-6xl:35px;
+    --text-7xl:40px
+}
+/*# sourceMappingURL=style.css.map */

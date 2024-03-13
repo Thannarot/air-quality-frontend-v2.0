@@ -1,0 +1,376 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.wind-map-container {
+    opacity: 1;
+    position: fixed;
+    top: 0px;
+    z-index: 1;
+    pointer-events: none;
+    width: 100%;
+}
+
+ 
+.mapboxgl-marker {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border:1px solid rgb(255, 255, 255);
+    background-color:rgb(255, 255, 255);
+}
+.mapboxgl-popup-close-button {
+    z-index: 999;
+}
+
+.overlay-panel-close {
+    width: 20px;
+    height: 20px;
+    background-color: #bfb7de;
+    color: #FFF;
+    border: 0;
+    border-radius: 4px;
+    cursor: pointer;
+    position: absolute;
+    right: -22px;
+    top: 2px;
+    text-align: center;
+}
+
+.mapboxgl-popup-content .mapboxgl-popup-close-button {
+    width: 20px;
+    height: 20px;
+    background-color: #4a40d3;
+    color: #FFF;
+    border: 0;
+    border-radius: 10px;
+    cursor: pointer;
+    position: absolute;
+    right: -22px;
+    top: 2px;
+}
+
+.mapboxgl-popup-content .mapboxgl-popup-close-button:hover {
+    background-color: #4a40d3;
+}
+.modal-close-button {
+    position: relative;
+    float: right;
+    background: #4c41d7;
+    width: -moz-fit-content;
+    width: fit-content;
+    border-radius: 50px;
+    padding: px;
+    color: #ffffff;
+    width: 25px;
+    height: 25px;
+        
+    }
+
+.open-statistic-button {
+    width: 20px;
+    height: 20px;
+    background-color: #4a40d3;
+    color: #FFF;
+    border: 0;
+    border-radius: 10px;
+    cursor: pointer;
+    right: -22px;
+    top: 2px;
+}
+
+.mapboxgl-popup-content {
+    background: #fff;
+    color: #a5a5a5;
+    border-radius: 0px;
+    box-shadow: 0 1px 2px rgba(0,0,0,.1);
+    padding: 10px 10px 15px;
+    pointer-events: auto;
+    position: relative;
+    min-width: 200px;
+    font-size: 12px;
+    border-bottom: 2px solid #e5e7eb;
+}
+.point-popup-val {
+    color: #4a40d3;
+    font-size: 12px;
+}
+
+[type='text'] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    /* background-color: #fff; */
+    background-color: none;
+    border-color: none;
+    border-width: 1px;
+    border-radius: 0px;
+    border:none;
+    padding-top: 0.5rem;
+    padding-right: 0.75rem;
+    padding-bottom: 0.5rem;
+    padding-left: 0.75rem;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.5rem;
+    --tw-shadow: 0 0 #0000;
+    text-align: center;
+
+}
+[type='text']:focus {
+    border:none;
+    --tw-ring-color: none;
+}
+.marker-text{
+    width:100%;
+    text-align:center;
+    font-size: 10px;
+    font-weight:500;
+    color:#EEE;
+    border-radius:0.5rem;
+}
+
+.map-marker {
+    width:30px;
+    transform:translateX(-50%) translateY(-25%);
+    z-index: 9999;
+}
+
+.mk-bg-blue {
+    background-color:#6ACAFA;
+}
+.mk-bg-green {
+    background-color:#9FCE62;
+}
+.mk-bg-yellow {
+    background-color:#FFFF54;
+}
+.mk-bg-orange {
+    background-color:#F2A63B;
+}
+.mk-bg-red {
+    background-color:#DE544D;
+}
+.mk-bg-grey {
+    background-color:#444;
+}
+
+.draw-marker {
+    width:10px;
+    transform:translateX(-50%) translateY(-25%);
+    z-index: 9999;
+}
+
+.draw-marker-2 {
+    border:  solid #000;
+    border-width: 1;
+    background-color:#fff;
+    border-radius: 50%;
+    opacity: 0.6;
+}
+
+.draw-marker-2-text {
+    bottom: 10px;
+    position: absolute;
+    width: auto;
+    color: #FFF;
+    width: 80px;
+}
+
+#cursorText {
+    position:absolute;
+    border:none; /* You can remove it*/
+    background-color: rgba(0,0,0,0.5);
+    z-index: 9999;
+    color: #fff;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 12px;
+
+}
+
+
+.overlay-panel {
+    padding: 10px;
+    font-size: 12px; 
+    width: 300px;
+    height: auto;
+    position: relative;
+    left: 10px;
+    top: 20px;
+    z-index: 999;
+    background-color: #FFF;
+    border-radius: 5px;
+    margin-bottom: 5px;
+ 
+ }
+
+
+
+ .panel-head {
+     font-size: 12px;
+     font-weight: 500; 
+     border-bottom: 1px solid #b2b2b2;
+ }
+ .panel-head p {
+     margin-bottom: 3px;
+ }
+ 
+ p {
+     margin-bottom: 3px;
+ }
+ 
+ .accordion {
+         margin-bottom: 10px;
+     }
+ 
+     .slider {
+         /* border: 1px solid #eee;
+         padding: 4px 20px; */
+ 
+         /* Added some color to illustrate the issue */
+         background-color: none;
+         color: white;
+     }
+ 
+     button {
+         font-size: 14px;
+     }
+ 
+     .purple-theme {
+         --track-focus: #c368ff;
+         --track-highlight-bgcolor: #c368ff;
+         --track-highlight-bg: linear-gradient(90deg, #c368ff, #c965ff);
+         --thumb-holding-outline: rgba(191, 102, 251, 0.3);
+         --tooltip-bgcolor: #c368ff;
+         --tooltip-bg: linear-gradient(45deg, #c368ff, #c965ff);
+     }
+ 
+     .theme-buttons {
+         display: flex;
+         justify-content: center;
+     }
+ 
+     h3 {
+         text-align: center;
+     }
+ 
+     label {
+         margin: 8px;
+         font-size: 16px;
+         font-weight: 600;
+     }
+ 
+     select {
+         font-size: 12px;
+     }
+ 
+     .text-sm {
+         line-height: 1rem;
+     }
+
+
+    .map-legend {
+        height: 30px;
+    }
+    .axis {
+		height: -webkit-fill-available;
+	}
+
+	.legendTitle {
+		font-size: 15px;
+		fill: #4f4f4f;
+		font-weight: 12;
+	}
+
+    .axis path, .axis line {
+        fill: none;
+        stroke: none; /*black;*/
+        shape-rendering: crispEdges;
+    }
+    
+    .axis text {
+        fill: #b3b3b3;
+        font-size: 8px;
+    }
+
+    .select_style {
+        font-size: 10px;
+      }
+
+      .nice-select {
+        background-color: #FFF;
+        border: #6f96d1 1px solid;
+        color: #091f5b;
+        font-size: 12px;
+        line-height: 40px;
+        padding: 0 30px 0 15px;
+        width: 100%;
+        height: 40px;
+        border-radius: 6px;
+    } 
+    
+    .nice-select:focus {
+        background-color: #d0dcf0;
+        border: #1a4381 1px solid;
+        color: #091f5b;
+    }
+    
+    .nice-select:hover {
+        background-color: #d0dcf0;
+    }
+
+    #box__home .box__info-ugm .slider .item {
+        height: auto;
+    }
+
+    #box__home .box__info-ugm {
+        z-index: 5;
+        width: 300px;
+        position: absolute;
+        top: 130px;
+        left: 30px;
+    }
+    #box__home .box__tool .detail {
+        overflow-x: hidden;
+        overflow-y: auto;
+        max-height: 600px;
+        margin-right: 0px;
+        padding-right: 5px;
+        width: 80px;
+    }
+
+    #select_air_pollutant {
+        background-color: #eceef1;
+        display: none;
+        padding: 30px;
+        z-index: 5;
+        width: 255px;
+        position: absolute;
+        top: 0;
+        left: auto;
+        right: 100px;
+        -webkit-box-shadow: 0 0 10px 0 rgba(175,175,175,0.6);
+        box-shadow: 0 0 10px 0 rgba(175,175,175,0.6);
+    }
+
+    #select_air_pollutant .btn-close, #mapsettingPanel .btn-close {
+        z-index: 5;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
+
+    #sidebar6 {
+        top: 115px;
+    }
+
+    #header .nav-container .title-page {
+        font-size: 18px;
+    }
+
+    .list__info a .active {
+        background: #091f5b;
+        color: #fff;
+    }
+

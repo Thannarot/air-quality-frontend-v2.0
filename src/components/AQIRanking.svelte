@@ -4,7 +4,7 @@
   import { hiddenDrawer, hiddenBottomDrawer, locx, locy, locname } from '../stores/app';
   import { selectedDate_str, selectedTime_str } from '../stores/dateTimeStore';
 
-  // import {Th, Mm, Vn, La, Kh } from 'svelte-flag-icons';
+  import * as Icon from 'svelte-flag-icons';
 
     let activateClickOutside = false;
     let backdrop = false;
@@ -54,7 +54,7 @@
         <div class="d-flex justify-content-start" >
             <div class="p-2 width10">1</div>
             <div class="p-2 width70 flex">
-                <div class="mr-1"></div>
+                <div class="mr-1"><Icon.Th size="20" /></div>
                 <div>Thailand, Bangkok</div>
             </div>
             <div class="p-2 width20">
@@ -66,7 +66,7 @@
         <div class="d-flex justify-content-start">
             <div class="p-2 width10">1</div>
             <div class="p-2 width70 flex">
-                <div class="mr-1"></div>
+                <div class="mr-1"><Icon.La size="20" /></div>
                 <div>Thailand, Bangkok</div>
             </div>
             <div class="p-2 width20">
@@ -78,7 +78,7 @@
         <div class="d-flex justify-content-start">
             <div class="p-2 width10">1</div>
             <div class="p-2 flex width70">
-                <div class="mr-1"></div>
+                <div class="mr-1"><Icon.Vn size="20" /></div>
                 <div>Laos, Bangkok</div>
             </div>
             <div class="p-2 width20">
@@ -90,7 +90,7 @@
         <div class="d-flex justify-content-start">
             <div class="p-2 width10">1</div>
             <div class="p-2 width70 flex">
-                <div class="mr-1"></div>
+                <div class="mr-1"><Icon.Kh size="20" /></div>
                 <div>Thailand, Bangkok</div>
             </div>
             <div class="p-2 width20">
@@ -102,7 +102,7 @@
         <div class="d-flex justify-content-start">
             <div class="p-2 width10">1</div>
             <div class="p-2 width70 flex">
-                <div class="mr-1"></div>
+                <div class="mr-1"><Icon.Mm size="20" /></div>
                 <div>Thailand, Bangkok</div>
             </div>
             <div class="p-2 width20">

@@ -3,64 +3,24 @@
 	<head>
 		<meta charset="utf-8" />
 		<link rel="icon" href="%sveltekit.assets%/favicon.png" />
-		<link rel="icon" href="favicon-96x96.png" />
+		<link rel="icon" href="favicon.png" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<!-- <link rel="shortcut icon" href="/favicon.ico" /> -->
 	
 		%sveltekit.head%
 
 		<link rel="stylesheet" href="/assets/vendor/@fortawesome/fontawesome-free/css/all.min.css"/>
-		<link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.css" rel="stylesheet" />
 		<link rel="stylesheet" href="/assets/styles/tailwind.css" />
 		<link type="text/css" rel="stylesheet" href="/assets/styles/style.css" />   
-		<link type="text/css" rel="stylesheet" href="/assets/styles/nice-select2.css" />   
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
-		<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+		<link type="text/css" rel="stylesheet" href="/assets/styles/nice-select2.css" />  
 		<script src="https://rawgit.com/moment/moment/2.2.1/min/moment.min.js"></script>
 	</head>
 	<body data-sveltekit-preload-data="hover">
 		<div style="display: contents">%sveltekit.body%</div>
-
-
-		<!-- <script defer>
-			$(function(){
-				if($(window).width() > 991){
-					$('.box__info-ugm .slider').slick({
-						dots: false,
-						infinite: false,
-						slidesToShow: 3,
-						slidesToScroll: 1,
-						arrows: true,
-						dots: false,
-						vertical: true,
-						verticalSwiping: true,
-						adaptiveHeight: true,
-						responsive: [{
-							breakpoint: 1480,
-								settings: {
-									slidesToShow: 2,
-									slidesToScroll: 1
-								}
-							}
-						]
-					}); 
-				}
-			}); -->
-			</script>
-
-
 	</body>
 
 
 	<!--   LOCAL SCRIPTS -->
 	<script src="/assets/js/windy.js"></script>
-	<!--for all page-->
-	<script src="/assets/js/jquery-3.7.1.min.js"></script>
-	<script defer src="/assets/js/select2/js/select2.min.js"></script>
-	<script defer src="/assets/js/common.js"></script>
-
-	<!--for this page-->
-	<script defer src="/assets/js/slick/slick.min.js"></script>
 	<script defer src="/assets/js/nice-select2.js"></script>
 
 </html>

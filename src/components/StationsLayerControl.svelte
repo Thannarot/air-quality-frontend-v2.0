@@ -1,9 +1,6 @@
 <script>
-    import "color-legend-element";
-    import { Select } from 'flowbite-svelte';
     import { pcdshow, selectedStation, ShowStation } from '../stores/app';
-    import { CheckOutline, ClockSolid, CloseSolid } from 'flowbite-svelte-icons';
-    
+
     $selectedStation = 'pcd'
     $ShowStation = true
     let station_options = [
@@ -16,10 +13,6 @@
 		$pcdshow = true
 	}
 
-  function closeStationPanel() {
-    $pcdshow = false;
-    $ShowStation = false;
-  }
   setTimeout(()=> {
 		NiceSelect.bind(document.querySelector("#select2-station"))
 	},100)

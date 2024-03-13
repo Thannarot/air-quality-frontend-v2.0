@@ -1,0 +1,91 @@
+@charset "utf-8";
+@import "_variables";
+@import "_mixins";
+
+.form-control{
+    background: #fff;
+    border: var(--blue-300) 1px solid;
+    color: var(--blue-600);
+    font-size: var(--text-base);
+    line-height: 40px;
+    padding: 0 15px;
+
+    width: 100%;
+    height: 40px;
+
+    border-radius: 6px;
+    &::-webkit-input-placeholder{
+        color: var(--blue-600);
+    }
+    &:-moz-placeholder{
+        color: var(--blue-600);
+    }
+    &::-moz-placeholder{
+        color: var(--blue-600);
+    }
+    &:-ms-input-placeholder{  
+        color: var(--blue-600);
+    }
+}
+textarea.form-control{
+    line-height: 1.1;
+    overflow: auto;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    min-height: auto;
+    resize: none;
+
+    height: 80px;
+}
+.form-check{
+    margin: 0;
+    padding: 0 0 0 30px;
+    .form-check-input{
+        cursor: pointer;
+        display: block;
+        float: none;
+        margin: 0;
+        border: 0;
+        
+        width: 20px;
+        height: 20px;
+
+        position: absolute;
+        top: 3px;
+        left: 0;
+
+        appearance: none;
+        &:focus{
+            box-shadow: none;
+        }
+        &.position-static{
+            top: 0;
+        }
+    }
+    .form-check-input[type=checkbox]{
+        background: url(../img/icon/icon-checkbox.svg) no-repeat;
+        border-radius: 3px;
+    }
+    .form-check-input:checked[type=checkbox]{
+        background: url(../img/icon/icon-checkbox-selected.svg) no-repeat;
+    }
+    .form-check-input[type=radio]{
+        background: url(../img/icon/radio.svg) no-repeat;
+    }
+    .form-check-input:hover[type=radio]{
+        background: url(../img/icon/radio-hover.svg) no-repeat;
+    }
+    .form-check-input:checked[type=radio],
+    .form-check-input:focus[type=radio],
+    .form-check-input:active[type=radio]{
+        background: url(../img/icon/radio-active.svg) no-repeat;
+        filter: none;
+    }   
+    .form-check-label{
+        cursor: pointer;
+        padding-top: 4px;
+        &.text-sm{
+            padding-top: 5px;
+        }
+    }
+} 

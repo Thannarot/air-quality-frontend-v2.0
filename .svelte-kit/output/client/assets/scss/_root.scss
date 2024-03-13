@@ -1,0 +1,32 @@
+:root{
+    // color
+    --blue-100                  : #d0dcf0;
+    --blue-300                  : #6f96d1;
+    --blue-400                  : #344ead;
+    --blue-600                  : #091f5b;
+    --grey                      : #8592a3;
+    --green                     : #00e9af;
+
+    // font-family
+    --font                      : 'Kanit', sans-serif;
+
+    // font-size
+    --text-xs                   : 12px;
+    --text-2sm                  : 13px;
+    --text-sm                   : 14px;
+    --text-base                 : 16px;
+    --text-lg                   : 18px;
+    --text-xl                   : 20px;
+    --text-2xl                  : 22px;
+    --text-3xl                  : 24px;
+    --text-4xl                  : 26px;
+    --text-5xl                  : 30px;
+    --text-6xl                  : 35px;
+    --text-7xl                  : 40px;
+}
+
+@include mobile{
+    :root{
+        // font-size
+    }
+}

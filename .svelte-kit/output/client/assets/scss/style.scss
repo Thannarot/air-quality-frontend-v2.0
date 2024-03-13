@@ -1,0 +1,20 @@
+@charset "utf-8";
+@import "_variables";
+@import "_mixins";
+@import "_root";
+
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap');
+
+@import url(fix-bootstrap.css);
+@import url(../js/select2/css/select2.min.css);
+@import url(fix-slick.css);
+@import url(fix-select2.css);
+@import url(general.css);
+@import url(color.css);
+@import url(font.css);
+@import url(button.css);
+@import url(form.css);
+@import url(popup.css);
+
+@import url(layout.css);
+@import url(template.css);

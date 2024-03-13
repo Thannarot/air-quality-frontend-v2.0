@@ -1,13 +1,10 @@
 <script>
 	import { onMount, getContext } from 'svelte';
 	import { Drawer, Button, CloseButton, Badge } from 'flowbite-svelte';
-	import { InfoCircleSolid, ArrowRightOutline } from 'flowbite-svelte-icons';
 	import { sineIn } from 'svelte/easing';
 	import { hiddenBottomDrawer, locx, locy, locname } from '../stores/app';
-	import { forecastedTime, forecastedDate, intializationDate } from '../stores/dateTimeStore';
-	import { selectedDate_str, selectedTime_str } from '../stores/dateTimeStore';
-	import * as Icon from 'svelte-flag-icons';
-	import qs from 'qs';
+	import { intializationDate } from '../stores/dateTimeStore';
+
 	import Chart from 'chart.js/auto';
 	import { addData, removeData } from '../helpers/Charts.js';
 	import { PUBLIC_BASE_API_URL } from '$env/static/public';
@@ -160,7 +157,7 @@
 			id="drawer-label"
 			class="inline-flex items-center mb-4 text-base font-semibold text-gray-500 dark:text-gray-400"
 		>
-			<InfoCircleSolid class="w-4 h-4 me-2.5" />PM 2.5 forecast of Thailand, Bangkok
+			PM 2.5 forecast of Thailand, Bangkok
 		</h5>
 		<CloseButton on:click={() => ($hiddenBottomDrawer = true)} class="mb-4 dark:text-white" />
 	</div>

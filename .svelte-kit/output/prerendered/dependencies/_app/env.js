@@ -1,0 +1,1 @@
+export const env={"PUBLIC_BASE_API_URL":"http://localhost:8080/api/","PUBLIC_BASE_WMS_URL":"http://216.218.240.247:8080/thredds/wms/","PUBLIC_BASE_WIND_URL":"https://wind-data-servir.adpc.net/latest","PUBLIC_BASE_FRIMS_WMS_URL":"'https://firms.modaps.eosdis.nasa.gov/mapserver/wms',"}

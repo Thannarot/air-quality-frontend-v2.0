@@ -1,0 +1,1236 @@
+@charset "utf-8";
+@import "_variables";
+@import "_mixins";
+
+/**
+ * Variables
+ */
+
+$caleran-border-color: #ddd !default;
+$caleran-border: 1px solid $caleran-border-color !default;
+$caleran-selected-day: #eb0a1e !default;
+$caleran-selected: #eb0a1e !default;
+$caleran-disabled-color: #b8b8df !default;
+$caleran-weekend-color: #568EA3 !default;
+$caleran-hover: #c8e1ff !default;
+$caleran-first-last: #eb0a1e !default;
+$caleran-header: #A6AAB3 !default;
+$caleran-header-sub: #c9c9d1 !default;
+$caleran-arrow: #c9c9d1 !default;
+$caleran-month-name: #6a6e71 !default;
+$caleran-mobile-background: ghostwhite !default;
+$caleran-mobile-buttons: #eb0a1e !default;
+$caleran-font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif !default;
+$caleran-selected-disabled-background: #c6dbf0 !default;
+$caleran-disabled-range-background: darken(ghostwhite, 1%) !default;
+$caleran-selected-disabled-color: white !default;
+$caleran-selected-disabled-transparency: 0.5 !default;
+
+/**
+ * Mobile & Desktop Common Styles
+ */
+
+.caleran-container,
+.caleran-container-mobile {
+    font-size: 15px;
+    float: left;
+    font-family: $caleran-font-family;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    z-index: 9999;
+    &:focus {
+        box-shadow: none;
+        outline: none;
+    }
+    .caleran-input {
+        margin: 5px;
+        border: $caleran-border;
+        border-radius: 6px;
+        overflow: hidden;
+        background: white;
+        display: flex;
+        display: -ms-flexbox;
+        flex-direction: column;
+        &.caleran-input-vertical-range {
+            flex-direction: row;
+            .caleran-left {
+                border-right: $caleran-border;
+            }
+            .caleran-right {
+                background: #fff;
+                position: relative;
+                display: flex;
+                flex-direction: column;
+                .caleran-ranges {
+                    border-top: none;
+                    display: flex;
+                    flex-direction: column;
+                    padding: 0;
+                    padding-bottom: 24px;
+                    overflow-y: auto;
+                    overflow-x: hidden;
+                    .caleran-range-header-container {
+                        padding: 8px 12px;
+                    }
+                    .caleran-range {
+                        flex: 1;
+                        padding: 8px 12px;
+                        margin: 3px 6px;
+                        background: $caleran-mobile-background;
+                        border: $caleran-border;
+                        border-radius: 3px;
+                        &.caleran-range-selected {
+                            background: $caleran-selected-day;
+                            color: white;
+                        }
+                    }
+                }
+                .caleran-footer {
+                    border-top: $caleran-border;
+                }
+            }
+        }
+        .caleran-header {
+            display: flex;
+            display: -ms-flexbox;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            padding: 20px 20px 10px 20px;
+            border-bottom: $caleran-border;
+            .caleran-header-separator {
+                flex: 0;
+                display: block;
+                margin: 0;
+                margin-top: -2px;
+                padding: 0 16px;
+                color: aliceblue;
+                font-size: 32px;
+            }
+            .caleran-header-start,
+            .caleran-header-end {
+                white-space: nowrap;
+                flex: 1;
+                display: block;
+                margin-right: 10px;
+                text-align: left;
+                .caleran-header-start-day,
+                .caleran-header-end-day {
+                    float: left;
+                    font-size: 2.5em;
+                    color: $caleran-selected-day;
+                    margin-top: -10px;
+                    margin-right: 8px;
+                    font-weight: 100;
+                    text-align: left;
+                }
+                .caleran-header-start-date,
+                .caleran-header-end-date {
+                    font-size: 0.9em;
+                    color: $caleran-header;
+                    display: inline-block;
+                }
+                .caleran-header-start-weekday,
+                .caleran-header-end-weekday {
+                    font-size: 0.7em;
+                    color: $caleran-header-sub;
+                }
+            }
+        }
+        .caleran-calendars {
+            position: relative;
+            display: flex;
+            display: -ms-flexbox;
+            .caleran-month-selector,
+            .caleran-year-selector {
+                position: absolute;
+                display: none;
+                border: 0px solid #fff;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                z-index: 100;
+                .caleran-ms-month,
+                .caleran-ms-month-disabled
+                {
+                    background: #eee;
+                    height: 33.33%;
+                    width: 25%;
+                    font-weight: bold;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    box-sizing: border-box;
+                    float: left;
+                    outline: $caleran-border;
+                    text-transform: capitalize;
+                    word-wrap: break-word;
+                    word-break: break-all;
+                    &.current {
+                        background: $caleran-first-last;
+                        color: white;
+                    }
+                    &:hover {
+                        background: $caleran-selected;
+                        cursor: pointer;
+                        color: white;
+                    }
+                }
+                .caleran-ms-month-disabled:hover {
+                    background: #eee;
+                    cursor: default;
+                }
+                .caleran-ys-year,
+                .caleran-ys-year-disabled,
+                .caleran-ys-year-next,
+                .caleran-ys-year-prev {
+                    margin: 0px;
+                    background: #eee;
+                    height: 33.33%;
+                    width: 20%;
+                    font-weight: bold;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    float: left;
+                    box-sizing: border-box;
+                    outline: $caleran-border;
+                    text-transform: uppercase;
+                    word-wrap: break-word;
+                    word-break: break-all;
+                    &.current {
+                        background: $caleran-first-last;
+                        color: white;
+                    }
+                    &:hover {
+                        background: $caleran-selected;
+                        cursor: pointer;
+                        color: white;
+                    }
+                }
+                .caleran-ys-year-disabled,
+                .caleran-ys-year-next,
+                .caleran-ys-year-prev {
+                    font-size: 2.65em;
+                    background: white;
+                    color: $caleran-selected-day;
+                }
+                .caleran-ys-year-disabled:hover {
+                    background: white;
+                    cursor: default;
+                }
+            }
+            .caleran-calendar {
+                flex: 1;
+                -ms-flex: 1;
+                float: left;
+                padding-bottom: 8px;
+                border-right: $caleran-border;
+                -webkit-box-sizing: border-box;
+                -moz-box-sizing: border-box;
+                box-sizing: border-box;
+                &.no-border-right {
+                    border-right: none;
+                }
+                &.caleran-calendar-weeknumbers {
+                    .caleran-days-container {
+                        .caleran-dayofweek,
+                        .caleran-day,
+                        .caleran-disabled,
+                        .caleran-weeknumber {
+                            width: calc(100% / 8);
+                            @media all and (-ms-high-contrast: none) {
+                                width: calc((100% / 8) - 1px);
+                            }
+                        }
+                    }
+                }
+                .caleran-title {
+                    text-align: center;
+                    font-weight: 300;
+                    font-size: 1.1em;
+                    color: #424242;
+                    text-transform: capitalize;
+                    border-bottom: $caleran-border;
+                    padding: 12px 8px;
+                    .caleran-month-switch,
+                    .caleran-year-switch {
+                        &:hover {
+                            color: $caleran-selected;
+                            cursor: hand;
+                            cursor: pointer;
+                        }
+                    }
+                    .caleran-prev,
+                    .caleran-next {
+                        margin-top: -4px;
+                    }
+                }
+                .caleran-days-container {
+                    padding: 10px;
+                    .caleran-dayofweek,
+                    .caleran-day,
+                    .caleran-disabled,
+                    .caleran-weeknumber {
+                        width: calc(100% / 7);
+                        @media all and (-ms-high-contrast: none) {
+                            width: calc((100% / 7) - 1px);
+                        }
+                        float: left;
+                        text-align: center;
+                        padding: 3px;
+                        font-size: .76em;
+                        font-weight: 400;
+                        -webkit-box-sizing: border-box;
+                        -moz-box-sizing: border-box;
+                        box-sizing: border-box;
+                        margin: 0;
+                        margin-bottom: 1px;
+                        span {
+                            pointer-events: none;
+                            display: block;
+                            padding: 3px 3px 3px 4px;
+                            border-radius: 4px;
+                        }
+                    }
+                    .caleran-dayofweek {
+                        text-transform: uppercase;
+                        font-size: 0.6em;
+                        font-weight: 600;
+                        color: #616161;
+                    }
+                    .caleran-weeknumber {
+                        background-color: $caleran-mobile-background;
+                        color: $caleran-weekend-color;
+                        border-right: $caleran-border;
+                    }
+                    .caleran-day {
+                        cursor: pointer;
+                        overflow: hidden;
+                        color: #212121;
+                        transition: background-color 0.1s ease-out;
+                        &:hover:not(.caleran-hovered):not(.caleran-selected) {
+                            background-color: $caleran-hover;
+                            border-radius: 3px;
+                        }
+                        &.caleran-selected,
+                        &.caleran-start,
+                        &.caleran-end {
+                            background: none;
+                            color: white;
+                            border-radius: 0;
+                            &.caleran-today {
+                                color: #fff !important;
+                            }
+                            &.caleran-disabled {
+                                background: $caleran-selected-disabled-background;
+                                color: $caleran-selected-disabled-color;
+                                opacity: $caleran-selected-disabled-transparency;
+                                span {
+                                    background: transparent !important;
+                                }
+                            }
+                        }
+                        &.caleran-hovered {
+                            background: $caleran-hover;
+                            color: black;
+                            &.caleran-disabled {
+                                opacity: .66;
+                            }
+                            &.caleran-hovered-first {
+                                border-top-left-radius: 6px;
+                                border-bottom-left-radius: 6px;
+                            }
+                            &.caleran-hovered-last {
+                                border-top-right-radius: 6px;
+                                border-bottom-right-radius: 6px;
+                            }
+                        }
+                        &.caleran-start:not(.caleran-hovered) {
+                            border-top-left-radius: 6px;
+                            border-bottom-left-radius: 6px;
+                            span {
+                                background: $caleran-first-last;
+                            }
+                        }
+                        &.caleran-end:not(.caleran-hovered) {
+                            border-top-right-radius: 6px;
+                            border-bottom-right-radius: 6px;
+                            span {
+                                background: $caleran-first-last;
+                            }
+                        }
+                    }
+                    .caleran-today {
+                        color: deeppink !important;
+                        font-weight: bold;
+                        &.caleran-hovered {
+                            color: black;
+                        }
+                    }
+                    .caleran-disabled.caleran-disabled-range {
+                        color: $caleran-disabled-color;
+                        &.caleran-selected,
+                        &.caleran-start,
+                        &.caleran-end {
+                            background: $caleran-selected;
+                            border-radius: 0;
+                            &.caleran-today {
+                                color: deeppink !important;
+                            }
+                        }
+                        &.caleran-start {
+                            border-top-left-radius: 6px;
+                            border-bottom-left-radius: 6px;
+                            span {
+                                background: $caleran-first-last;
+                            }
+                        }
+                        &.caleran-end {
+                            border-top-right-radius: 6px;
+                            border-bottom-right-radius: 6px;
+                            span {
+                                background: $caleran-first-last;
+                            }
+                        }
+                    }
+                    .caleran-disabled {
+                        color: $caleran-disabled-color;
+                        &.caleran-selected,
+                        &.caleran-start,
+                        &.caleran-end {
+                            background: $caleran-selected;
+                            color: white;
+                            border-radius: 0;
+                            &.caleran-today {
+                                color: deeppink !important;
+                            }
+                        }
+                        &.caleran-start {
+                            border-top-left-radius: 6px;
+                            border-bottom-left-radius: 6px;
+                            span {
+                                background: $caleran-first-last;
+                            }
+                        }
+                        &.caleran-end {
+                            border-top-right-radius: 6px;
+                            border-bottom-right-radius: 6px;
+                            span {
+                                background: $caleran-first-last;
+                            }
+                        }
+                    }
+                    .caleran-weekend {
+                        color: $caleran-weekend-color;
+                    }
+                    .caleran-not-in-month {
+                        opacity: 0.65;
+                    }
+                }
+                .caleran-next,
+                .caleran-prev {
+                    cursor: pointer;
+                    font-size: 1.25em;
+                    &:hover {
+                        text-shadow: 1px 2px 3px #eee;
+                    }
+                }
+                .caleran-next {
+                    float: right;
+                }
+                .caleran-prev {
+                    float: left;
+                }
+                &:last-child {
+                    border-right: none;
+                }
+            }
+        }
+        .caleran-ranges {
+            border-top: $caleran-border;
+            clear: both;
+            padding: 10px;
+            text-align: left;
+            i {
+                float: left;
+                color: $caleran-month-name;
+                font-size: 14px;
+                margin-right: 5px;
+                margin-top: 1px;
+            }
+            .caleran-range-header {
+                font-size: 0.8em;
+                color: $caleran-month-name;
+                display: inline-block;
+                margin-right: 5px;
+                font-weight: bold;
+            }
+            .caleran-range {
+                display: inline-block;
+                color: $caleran-selected;
+                margin: 3px;
+                font-size: 0.7em;
+                cursor: pointer;
+                font-weight: bold;
+                &:hover {
+                    text-decoration: underline;
+                }
+                &.caleran-range-selected {
+                    color: $caleran-mobile-buttons;
+                    &:hover {
+                        text-decoration: none;
+                    }
+                }
+            }
+        }
+    }
+    &.caleran-hotel-style {
+        .caleran-calendar {
+            .caleran-disabled-range-end {
+                background-image: linear-gradient(45deg, $caleran-disabled-range-background 49%, transparent 50%);
+            }
+            .caleran-disabled-range-start {
+                background-image: linear-gradient(225deg, $caleran-disabled-range-background 49%, transparent 50%);
+            }
+            .caleran-disabled-range-start.caleran-disabled-range-end {
+                background-image: linear-gradient(45deg, $caleran-disabled-range-background 49%, transparent 50%);
+            }
+            .caleran-disabled-range-start.caleran-disabled-range-end.caleran-selected {
+                background-image: none !important;
+            }
+            .caleran-disabled.caleran-disabled-range {
+                color: $caleran-disabled-color;
+                background: $caleran-disabled-range-background;
+                &.caleran-selected,
+                &.caleran-start,
+                &.caleran-end {
+                    background: $caleran-selected;
+                    color: white;
+                    border-radius: 0;
+                    &.caleran-today {
+                        color: deeppink !important;
+                    }
+                }
+                &.caleran-start {
+                    border-top-left-radius: 6px;
+                    border-bottom-left-radius: 6px;
+                    span {
+                        background: $caleran-first-last;
+                    }
+                }
+                &.caleran-end {
+                    border-top-right-radius: 6px;
+                    border-bottom-right-radius: 6px;
+                    span {
+                        background: $caleran-first-last;
+                    }
+                }
+            }
+            .caleran-disabled-range-start.caleran-hovered {
+                background: linear-gradient(45deg, $caleran-hover 49%, $caleran-disabled-range-background 50%) !important;
+                border-radius: 0 !important;
+            }
+            .caleran-disabled-range-end.caleran-hovered {
+                background: linear-gradient(225deg, $caleran-hover 49%, $caleran-disabled-range-background 50%) !important;
+                border-radius: 0 !important;
+            }
+        }
+    }
+}
+
+.caleran-popup {
+    position: absolute;
+    display: none;
+    top: 0;
+    left: 0;
+}
+
+.caleran-box-arrow-top {
+    width: 22px;
+    height: 22px;
+    z-index: 12;
+    margin-left: 0;
+    position: absolute;
+    top: 0px;
+    &:after,
+    &:before {
+        bottom: calc(100% - 6px);
+        left: 27px;
+        border: solid transparent;
+        content: " ";
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none;
+    }
+    &:after {
+        border-color: rgba(255, 255, 255, 0);
+        border-bottom-color: #ffffff;
+        border-width: 10px;
+        margin-left: -10px;
+    }
+    &:before {
+        border-color: rgba(184, 184, 184, 0);
+        border-bottom-color: $caleran-border-color;
+        border-width: 11px;
+        margin-left: -11px;
+    }
+}
+
+.caleran-box-arrow-bottom {
+    width: 22px;
+    height: 22px;
+    z-index: 12;
+    margin-left: 0;
+    position: absolute;
+    bottom: 0px;
+    &:after,
+    &:before {
+        bottom: -15px;
+        left: 27px;
+        border: solid transparent;
+        content: " ";
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none;
+    }
+    &:after {
+        border-color: rgba(255, 255, 255, 0);
+        border-top-color: #ffffff;
+        border-width: 11px;
+        margin-left: -11px;
+    }
+    &:before {
+        border-color: rgba(184, 184, 184, 0);
+        border-top-color: $caleran-border-color;
+        border-width: 10px;
+        margin-left: -10px;
+    }
+}
+
+.caleran-box-arrow-left {
+    width: 21px;
+    height: 21px;
+    z-index: 12;
+    margin-top: 0px;
+    position: absolute;
+    left: 0px;
+    &:after,
+    &:before {
+        border: solid transparent;
+        content: " ";
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none;
+    }
+    &:after {
+        border-color: rgba(255, 255, 255, 0);
+        border-right-color: #ffffff;
+        border-width: 12px;
+        left: -18px;
+        top: 29px;
+    }
+    &:before {
+        border-color: rgba(184, 184, 184, 0);
+        border-right-color: #ddd;
+        border-width: 14px;
+        left: -22px;
+        top: 27px;
+    }
+}
+
+.caleran-box-arrow-right {
+    width: 22px;
+    height: 22px;
+    z-index: 12;
+    margin-top: 0px;
+    position: absolute;
+    right: 0px;
+    &:after,
+    &:before {
+        right: -15px;
+        top: 27px;
+        border: solid transparent;
+        content: " ";
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none;
+    }
+    &:after {
+        border-color: rgba(255, 255, 255, 0);
+        border-left-color: #ffffff;
+        border-width: 12px;
+        margin-left: -12px;
+        right: -17px;
+        top: 30px;
+    }
+    &:before {
+        border-color: rgba(184, 184, 184, 0);
+        border-left-color: $caleran-border-color;
+        border-width: 12px;
+        margin-left: -10px;
+        right: -19px;
+        top: 30px;
+    }
+}
+.caleran-container {
+    .caleran-input {
+        .caleran-footer {
+            text-align: right;
+            .caleran-apply {
+                background: $caleran-selected;
+                border: none;
+                padding: 6px 18px;
+                color: white;
+                font-family: $caleran-font-family;
+                font-size: 12px;
+                margin: 6px;
+                border-radius: 3px;
+                &:disabled {
+                    background: $caleran-arrow;
+                    color: gray;
+                }
+            }
+            .caleran-cancel {
+                background: $caleran-arrow;
+                border: none;
+                padding: 6px 18px;
+                color: $caleran-month-name;
+                margin: 6px;
+                font-family: $caleran-font-family;
+                font-size: 12px;
+                margin-right: 0px;
+                border-radius: 3px;
+            }
+        }
+    }
+}
+
+/**
+ * Mobile styles
+ */
+
+.caleran-open {
+    overflow: hidden;
+}
+
+.caleran-container-mobile {
+    .caleran-input {
+        margin: 0;
+        border: 0;
+        border-radius: 0;
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        z-index: 9999;
+        margin: 12px;
+        border-radius: 6px;
+        border: 1px solid $caleran-border-color;
+        display: flex;
+        display: -ms-flexbox;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        align-content: center;
+        overflow-y: auto;
+        @media screen and (orientation: landscape) {
+            overflow-y: scroll;
+            flex-wrap: wrap;
+        }
+        .caleran-header {
+            box-sizing: border-box;
+            padding: 12px;
+            order: 0;
+            display: flex;
+            display: -ms-flexbox;
+            flex: 0 0 auto;
+            -ms-flex: 0 0 auto;
+            flex-flow: nowrap;
+            background: $caleran-mobile-background;
+            justify-content: space-between;
+            align-items: center;
+            @media screen and (orientation: landscape) {
+                width: 50%;
+                float: right;
+                order: 1;
+                padding: 12px 6px;
+                border-left: 1px solid #ddd;
+                height: 61px;
+            }
+            .caleran-header-separator {
+                padding: 0;
+                margin: 0;
+                display: flex;
+                display: -ms-flexbox;
+                color: lightsteelblue;
+                margin-top: 2px;
+            }
+            .caleran-header-start,
+            .caleran-header-end {
+                margin: 0;
+                .caleran-header-start-day,
+                .caleran-header-end-day {
+                    font-size: 38px;
+                    margin: -10px;
+                    font-weight: 400;
+                }
+                .caleran-header-start-date,
+                .caleran-header-end-date {
+                    font-size: 15px;
+                    color: $caleran-month-name;
+                    font-weight: 500;
+                }
+                .caleran-header-start-weekday,
+                .caleran-header-end-weekday {
+                    font-size: 12px;
+                    color: $caleran-month-name;
+                    font-weight: 400;
+                    line-height: 10px;
+                }
+            }
+            .caleran-header-start {
+                .caleran-header-start-day {
+                    margin-right: 8px;
+                    margin-left: 0;
+                    float: left;
+                }
+            }
+            .caleran-header-end {
+                text-align: right;
+                .caleran-header-end-day {
+                    float: right;
+                    margin-left: 8px;
+                    margin-right: 0;
+                }
+            }
+        }
+        .caleran-calendars {
+            order: 1;
+            flex: 1 1 auto;
+            -ms-flex: 1 1 auto;
+            background: white;
+            display: flex;
+            display: -ms-flexbox;
+            flex-direction: column;
+            overflow: scroll;
+            @media screen and (orientation: landscape) {
+                width: 50%;
+                float: left;
+                order: 0;
+            }
+            .caleran-month-selector,
+            .caleran-year-selector {
+                border-bottom: $caleran-border;
+                .caleran-ms-month {
+                    flex: 1 1 33.33%;
+                    -ms-flex: 1 1 33.33%;
+                    height: 25%;
+                }
+                .caleran-ys-year {
+                    flex: 1 1 20%;
+                    -ms-flex: 1 1 20%;
+                    height: 33.33%;
+                }
+            }
+            .caleran-calendar {
+                @media screen and (orientation: landscape) {
+                    border: none;
+                }
+                .caleran-title {
+                    padding: 12px 18px;
+                    font-size: 1.36em;
+                    .caleran-prev,
+                    .caleran-next {
+                        margin-top: -6px;
+                    }
+                    i {
+                        font-size: 0.9em;
+                    }
+                    @media screen and (orientation:landscape) {
+                        height: 61px;
+                        box-sizing: border-box;
+                        padding-top: 18px;
+                    }
+                }
+                .caleran-days-container {
+                    padding: 10px;
+                    .caleran-dayofweek,
+                    .caleran-day,
+                    .caleran-disabled {
+                        min-height: 30px;
+                        @media screen and (orientation: landscape) {
+                            min-height: calc((80vmin - 62px) / 7);
+                        }
+                        font-size: 14px !important;
+                        position: relative;
+                        justify-content: center;
+                        align-items: center;
+                        display: flex;
+                        display: -ms-flexbox;
+                        margin: 0;
+                        span {
+                            display: flex;
+                            display: -ms-flexbox;
+                            align-items: center;
+                            justify-content: center;
+                            position: absolute;
+                            left: 0;
+                            top: 0;
+                            bottom: 0;
+                            right: 0;
+
+                            color: var(--grey-400);
+                            font-family: "DB Heavent", sans-serif;
+                            font-size: var(--font-heavent-small);
+                            margin: 0 auto;
+                            padding: 0;
+                        }
+                    }
+                }
+            }
+        }
+        .caleran-ranges {
+            background: white;
+            order: 2;
+            flex: 0 0 auto;
+            -ms-flex: 0 0 auto;
+            margin: 0px;
+            padding: 4px;
+            border: none;
+            text-align: center;
+            @media screen and (orientation: landscape) {
+                width: 50%;
+                box-sizing: border-box;
+                flex: 1 1 0;
+                -ms-flex: 1 1 0;
+                border-left: 1px solid #ddd;
+                overflow-y: scroll;
+                min-height: 50px;
+            }
+            i {
+                font-size: 20px;
+                display: none;
+            }
+            .caleran-range-header {
+                font-size: 0.9em;
+                display: none;
+            }
+            .caleran-range {
+                font-size: 0.85em;
+                padding: 5px 14px;
+                background: $caleran-first-last;
+                font-weight: 400;
+                color: white;
+                border-radius: 21px;
+                @media screen and (orientation: landscape) {
+                    border-radius: 6px;
+                    margin: 6px;
+                    display: block;
+                }
+            }
+        }
+        .caleran-filler {
+            display: none;
+            @media screen and (orientation: landscape) {
+                display: block;
+                box-sizing: border-box;
+                flex-grow: 1;
+                margin-bottom: auto;
+                border-left: 1px solid $caleran-border-color;
+                min-height: 100px;
+                order: 3;
+            }
+        }
+        .caleran-ranges+.caleran-filler {
+            display: none;
+        }
+        .caleran-footer {
+            order: 3;
+            flex: 0 0 auto;
+            -ms-flex: 0 0 auto;
+            text-align: center;
+            padding: 8px 8px 10px 8px;
+            background: $caleran-mobile-background;
+            border-top: 1px solid $caleran-border-color;
+            @media screen and (orientation: landscape) {
+                width: 50%;
+                box-sizing: border-box;
+                border-left: 1px solid #ddd;
+                margin-top: auto;
+            }
+            button {
+                font-size: 15px;
+                font-family: $caleran-font-family;
+                padding: 8px;
+                font-weight: 400;
+                outline: none;
+                border: none;
+                border-radius: 4px;
+                width: calc((100% - 10px)/2);
+                &.caleran-apply {
+                    background: $caleran-mobile-buttons;
+                    color: white;
+                    margin-left: 7px;
+                    font-weight: 500;
+                    border: 1px solid $caleran-mobile-buttons;
+                    &[disabled=disabled],
+                    &:disabled {
+                        background: $caleran-header-sub;
+                        color: $caleran-header;
+                        border: 1px solid $caleran-header;
+                    }
+                }
+                &.caleran-cancel {
+                    background: transparent;
+                    color: $caleran-mobile-buttons;
+                    border: 1px solid $caleran-mobile-buttons;
+                    box-sizing: border-box;
+                }
+            }
+        }
+    }
+}
+
+.caleran-container.caleran-rtl {
+    .caleran-header {
+        flex-direction: row;
+        .caleran-header-separator {
+            transform: rotateY(180deg);
+        }
+        .caleran-header-start {
+            text-align: right;
+            .caleran-header-start-day {
+                float: right;
+                margin-left: 5px;
+                margin-right: 0;
+            }
+        }
+    }
+    .caleran-calendar:last-child{
+        border-right: 1px solid $caleran-border-color !important;
+    }
+    .caleran-calendar:first-child {
+        border-right: 0px solid transparent;
+    }
+    .caleran-days-container {
+        display: flex;
+        flex-wrap: wrap;
+        .caleran-start, .caleran-hovered-first {
+            border-radius: 0 6px 6px 0 !important;
+        }
+        .caleran-end, .caleran-hovered-last {
+            border-radius: 6px 0 0 6px !important;
+        }
+        .caleran-start.caleran-end, .caleran-hovered-first.caleran-hovered-last {
+            border-radius: 6px !important;
+        }
+    }
+    .caleran-ranges {
+        text-align: right;
+    }
+}
+
+.caleran-container-mobile.caleran-inline {
+    box-sizing: border-box;
+    width: 100%;
+    .caleran-input {
+        position: static;
+        box-shadow: none;
+        box-sizing: border-box;
+        overflow: hidden;
+        .caleran-calendar {
+            border-right: none;
+        }
+        @media screen and (orientation: landscape) {
+            flex-direction: column;
+            flex-wrap: wrap;
+            .caleran-calendars {
+                order: 0;
+                flex: 1 0 auto;
+                width: calc(50% - 1px);
+                border-left: none;
+                border-right: 1px solid $caleran-border-color;
+            }
+            .caleran-header {
+                order: 1;
+                flex: 0 1 auto;
+                border-left: none;
+            }
+            .caleran-timepickers {
+                order: 2;
+                flex: 0 0 auto;
+                max-width: 50%;
+                border-left: none;
+                .caleran-timepicker-ampm {
+                    width: 7vmin;
+                }
+            }
+            .caleran-ranges {
+                order: 3;
+                flex: 0 1 auto;
+                width: 50%;
+                border-left: none;
+            }
+        }
+        .caleran-footer {
+            display: none;
+        }
+    }
+}
+
+@media screen\0 {
+    .caleran-dayofweek,
+    .caleran-day,
+    .caleran-disabled {
+        width: calc((100% / 7) - 2px) !important;
+        padding: 2px !important;
+    }
+    .caleran-input-vertical-range .caleran-left {
+        flex: 1;
+    }
+    .caleran-input-vertical-range .caleran-ranges {
+        flex: 1;
+    }
+    .caleran-input-vertical-range .caleran-range {
+        flex: 0 1 auto !important;
+        line-height: 1em !important;
+    }
+}
+
+.caleran-overlay {
+    z-index: 9998;
+    display: none;
+    background: rgba(0, 0, 0, 0.4);
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100vw;
+    height: 100vh;
+}
+
+// fix
+.caleran-container .caleran-input, .caleran-container-mobile .caleran-input{
+    border-radius: 0;
+    @include desktop{
+        width: vw(400)!important;
+    }
+}
+.caleran-container-mobile{
+    margin: 0;
+
+    width: vwmb(708);
+
+    position: fixed;
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-50%,-50%);
+    .caleran-input{
+        position: relative;
+    }
+    .caleran-footer{
+        display: none!important;
+    }
+}
+.caleran-container .caleran-input .caleran-header, 
+.caleran-container-mobile .caleran-input .caleran-header{
+    display: none;
+}
+.caleran-container .caleran-input .caleran-calendars .caleran-calendar .caleran-title, 
+.caleran-container-mobile .caleran-input .caleran-calendars .caleran-calendar .caleran-title{
+    border-color: #000;
+    font-family: 'DB Heavent Md', sans-serif;
+    margin: 0 15px;
+    padding: 10px 0 0;
+}
+.caleran-container .caleran-input .caleran-calendars .caleran-calendar .caleran-days-container .caleran-dayofweek, 
+.caleran-container-mobile .caleran-input .caleran-calendars .caleran-calendar .caleran-days-container .caleran-dayofweek{
+    color: #000;
+    font-family: 'DB Heavent Md', sans-serif;
+    font-weight: 400;
+}
+.caleran-container .caleran-input .caleran-calendars .caleran-calendar{
+    padding: 0 0 10px;
+    border-right: 0;
+}
+.caleran-container .caleran-input .caleran-calendars .caleran-calendar .caleran-days-container .caleran-disabled,
+.caleran-container .caleran-input .caleran-calendars .caleran-calendar .caleran-days-container .caleran-day,
+.caleran-container-mobile .caleran-input .caleran-calendars .caleran-calendar .caleran-days-container .caleran-day{
+    background: none!important;
+    margin: 0;
+    padding: 5px 0;
+    span{
+        color: #000;
+        font-family: 'DB Heavent', sans-serif;
+        line-height: 40px;
+        margin: 0 auto;
+        padding: 0;
+        text-align: center;
+
+        width: 40px;
+        height: 40px;
+
+        border-radius: 100%;
+    }
+    &.caleran-selected{
+        span{
+            background: var(--red)!important;
+            color: #fff!important;
+        }
+    }
+    &.caleran-not-in-month{
+        opacity: 1;
+        span{
+            color: var(--grey-400)!important;
+        }
+    }
+}
+.caleran-container .caleran-input .caleran-calendars .caleran-calendar .caleran-days-container .caleran-disabled{
+    font-weight: normal!important;
+    span{
+        color: var(--grey-400)!important;
+    }
+}
+.caleran-container .caleran-input .caleran-calendars .caleran-calendar .caleran-days-container .caleran-disabled.caleran-today{
+    span{
+        background: var(--grey-li) !important;
+    }
+}
+.caleran-container .caleran-input .caleran-calendars .caleran-calendar .caleran-days-container .caleran-day.caleran-not-in-month.caleran-selected{
+    span{
+        background: none!important;
+        color: var(--grey-400)!important;
+    }
+}
+.caleran-container .caleran-input .caleran-calendars .caleran-calendar .caleran-prev, 
+.caleran-container-mobile .caleran-input .caleran-calendars .caleran-calendar .caleran-prev,
+.caleran-container .caleran-input .caleran-calendars .caleran-calendar .caleran-next, 
+.caleran-container-mobile .caleran-input .caleran-calendars .caleran-calendar .caleran-next{
+    background: url(../img/icon/arrow__left-000000.svg) no-repeat center center;
+    background-size: 12px auto;
+    display: block;
+    margin: 0!important;
+    text-indent: -9998px;
+
+    width: 30px;
+    height: 30px;
+
+    transform: translateY(7px);
+}
+.caleran-container .caleran-input .caleran-calendars .caleran-calendar .caleran-next, 
+.caleran-container-mobile .caleran-input .caleran-calendars .caleran-calendar .caleran-next{
+    background: url(../img/icon/arrow__right-000000.svg) no-repeat center center;
+    background-size: 12px auto;
+}

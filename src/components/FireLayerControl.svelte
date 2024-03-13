@@ -1,9 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
-	import { Select, Toggle, CloseButton, Badge } from 'flowbite-svelte';
-  import { CheckOutline, ClockSolid, CloseSolid } from 'flowbite-svelte-icons';
-	import { getLegend } from '../helpers/app';
-	import { pcdshow, selectedFire, ShowFire } from '../stores/app';
+
+	import { selectedFire, ShowFire } from '../stores/app';
 
 	let fire_options = [
 		{ value: 'vfei', name: 'VIIRS-based Fire Emission Inventory (VFEI)' },
@@ -12,9 +10,6 @@
     { value: 'fires_viirs_time', name: 'VIIRS active fire for a single day' }
 	];
   
-  function closeFirePanel() {
-    $ShowFire = false;
-  }
 
   setTimeout(()=> {
 		NiceSelect.bind(document.querySelector("#select2-fire"))

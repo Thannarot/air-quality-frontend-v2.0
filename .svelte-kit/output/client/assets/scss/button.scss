@@ -1,0 +1,111 @@
+@charset "utf-8";
+@import "_variables";
+@import "_mixins";
+
+.btn{
+    background: var(--blue-400);
+
+    height: 38px;
+
+    box-shadow: 0 2px 4px 0 var(--blue-400);
+    &:hover{
+        background: var(--blue-300);
+        box-shadow: 0 2px 4px 0 var(--blue-300);
+    }
+    &:focus,
+    &:active,
+    &:first-child:active{
+        background: var(--blue-600);
+        box-shadow: 0 2px 4px 0 var(--blue-600);
+    }
+}
+
+.btn-analysis,
+.btn-plus,
+.btn-minus{
+    background-color: #fff;
+    border: #fff 2px solid;
+
+    width: 46px;
+    height: 46px;
+
+    border-radius: 10px;
+    box-shadow: 0 0 10px 0 rgba(175, 175, 175, 0.6);
+    @include notebook{
+        width: 40px;
+        height: 40px;
+    }
+    img{
+        width: 21px;
+        @include notebook{
+            width: 17px;
+        }
+    }
+    &:hover{
+        background: var(--blue-400);
+        border-color: var(--blue-400);
+        box-shadow: 0 0 10px 0 rgba(175, 175, 175, 0.2);
+        img{
+            filter: brightness(0) invert(1);
+        }
+    }
+    &.active,
+    &:focus,
+    &:active{
+        background: var(--blue-600);
+        border-color: #fff;
+        img{
+            filter: brightness(0) invert(1);
+        }
+    }
+}
+.btn-control-decrease,
+.btn-control-increase{
+    background: url(../img/button/btn-control-decrease.svg) no-repeat;
+    padding: 0 0 0 8px;
+
+    width: 58px;
+    height: 53px;
+    &:hover{
+        background: url(../img/button/btn-control-decrease-hover.svg) no-repeat;
+    }
+    &:focus,
+    &:active{
+        background: url(../img/button/btn-control-decrease-active.svg) no-repeat;
+    }
+}
+.btn-control-increase{
+    background: url(../img/button/btn-control-increase.svg) no-repeat;
+    padding: 0 8px 0 0;
+    &:hover{
+        background: url(../img/button/btn-control-increase-hover.svg) no-repeat;
+    }
+    &:focus,
+    &:active{
+        background: url(../img/button/btn-control-increase-active.svg) no-repeat;
+    }
+}
+
+.btn-close{
+    background: #fff;
+    padding: 0;
+    opacity: 1;
+
+    width: 25px;
+    height: 25px;
+
+    border-radius: 4px;
+    &:hover{
+        background: var(--blue-400);
+        img{
+            filter: brightness(0) invert(1);
+        }
+    }
+    &:focus,
+    &:active{
+        background: var(--blue-600);
+        img{
+            filter: brightness(0) invert(1);
+        }
+    }
+}

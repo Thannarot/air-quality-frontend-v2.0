@@ -1,0 +1,85 @@
+@charset "utf-8";
+@import "_variables";
+@import "_mixins";
+
+/* general selector
+*/
+*{
+	outline:0!important;
+}
+html, body{
+    margin: 0;
+    padding: 0;
+}
+body{
+    color: var(--grey);
+    font-family: var(--font);
+    font-size: var(--text-base);
+    line-height: 1.1;
+    overflow-x: hidden;
+}
+body, p, div, ul, ol, li, a, span, label{
+	position:relative;
+}
+a, a:hover, a:focus{
+    cursor: pointer;
+	text-decoration:none;
+}
+a{
+    color: var(--grey);
+}
+a:hover{
+    color: var(--blue-400);
+}
+a:focus,
+a:active{
+    color: var(--blue-600);
+}
+p, ul, ol{
+    margin-bottom: var(--size-10);
+}
+p, div, ul, ol, li, a, label{
+	position:relative;
+}
+p, li{
+    text-wrap: wrap;
+}
+div, p, li, a, input, textarea, select, label, span, strong{
+	-webkit-box-sizing: border-box;
+  	-moz-box-sizing: border-box;   
+  	box-sizing: border-box;       
+}
+em{
+    font-style: normal;
+}
+img{
+    max-width: 100%;
+}
+label, input{
+	display:block;
+}
+.container{
+    padding-left: 15px;
+    padding-right: 15px;
+    max-width: 1200px;
+}
+.detail[aria-hidden="true"]{
+    display: block!important;
+    position: absolute;
+    left: -9998px;
+}
+.detail[aria-hidden="false"]{
+    display: block!important;
+    position: relative;
+    left: 0;
+}
+.filter-white{
+    filter: brightness(0) invert(1);
+}
+.filter-black{
+    filter: brightness(0%);
+}
+#maincontent{
+    min-height: 100vh;
+    min-height: 100dvh;
+}

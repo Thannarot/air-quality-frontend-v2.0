@@ -1,0 +1,76 @@
+$resolution               : 1920;
+$percent                  : 100vw;
+$vw-mb                    : ($percent / $resolution) * ($resolution/768);
+$vw                       : ($percent / $resolution) * ($resolution/1920);
+$color                    : #3a3a3a;
+$black                    : #101010;
+$black-li                 : #4a4a4a;
+$grey                     : #999;
+$grey-md                  : #808080;
+$grey-li                  : #f5f5f5;
+$red                      : #eb0a1e;
+$blue                     : #266bf4;
+
+$font                     : 'DB Heavent';
+$font-li                  : 'DB Heavent Li';
+$font-md                  : 'DB Heavent Md';
+$font-bd                  : 'DB Heavent Bd';
+
+$sarabun                  : 'Sarabun';
+$sarabun-li               : 'Sarabun Light';
+$sarabun-md               : 'Sarabun Medium';
+$sarabun-sm               : 'Sarabun SemiBold';
+$sarabun-bd               : 'Sarabun Bold';
+
+// font-heavent
+$font-heavent-small                     : 1.1458333333vw;       //vw(22)
+$font-heavent-thin                      : 1.3541666667vw;       //vw(26)
+$font-heavent-general                   : 1.5625vw;             //vw(30)
+$font-heavent-general-bold              : 1.7708333333vw;       //vw(34)
+$font-heavent-title                     : 2.0833333333vw;       //vw(40)
+$font-heavent-subhead                   : 2.2916666667vw;       //vw(44)
+$font-heavent-head-title                : 2.5vw;                //vw(48)
+$font-heavent-head-info                 : 3.125vw;              //vw(60)
+$font-heavent-head-section              : 4.1666666667vw;       //vw(80)
+
+$font-heavent-small-mobile              : 4.1666666667vw;       //vwmb(32)
+$font-heavent-thin-mobile               : 4.6875vw;             //vwmb(36)
+//$font-heavent-general-mobile            : 5.2083333333vw;       //vwmb(40)
+$font-heavent-general-mobile            : 5.7291666667vw;       //vwmb(44)
+$font-heavent-general-bold-mobile       : 6.5104166667vw;       //vwmb(52)
+$font-heavent-title-mobile              : 7.8125vw;             //vwmb(60)
+//$font-heavent-title-mobile              : 6.5104166667vw;       //vwmb(50)
+$font-heavent-subhead-mobile            : 8.8541666667vw;       //vwmb(68)
+$font-heavent-head-mobile               : 9.8958333333vw;       //vwmb(76)
+$font-heavent-head-section-mobile       : 10.9375vw;            //vw(84)
+
+// font-sarabun
+$font-sarabun-small                     : 0.8333333333vw;       //vw(16)
+//$font-sarabun-general                   : 0.9375vw;             //vw(18)
+$font-sarabun-general                   : 1.0416666667vw;       //vw(20)
+$font-sarabun-general-bold              : 1.25vw;               //vw(24)
+$font-sarabun-title                     : 1.6666666667vw;       //vw(32)
+$font-sarabun-subhead                   : 1.9791666667vw;       //vw(38)
+$font-sarabun-head-title                : 2.2916666667vw;       //vw(44)
+
+$font-sarabun-small-mobile              : 3.3854166667vw;       //vwmb(26)
+$font-sarabun-general-mobile            : 3.90625vw;            //vwmb(30)
+$font-sarabun-general-bold-mobile       : 4.4270833333vw;       //vwmb(34)
+$font-sarabun-title-mobile              : 5.46875vw;            //vwmb(42)
+$font-sarabun-subhead-mobile            : 6.5104166667vw;       //vwmb(50)
+$font-sarabun-head-mobile               : 7.5520833333vw;       //vwmb(58)
+        
+$vw-viewport: 1920;
+$vwmb-viewport: 768;
+
+@function vw($unit){
+    $vw-context: $vw-viewport * 0.01;
+    @return $unit / $vw-context * 1vw;
+    @return $unit;
+}
+
+@function vwmb($unit){
+    $vwmb-context: $vwmb-viewport * 0.01;
+    @return $unit / $vwmb-context * 1vw;
+    @return $unit;
+}

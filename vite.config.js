@@ -5,11 +5,12 @@ import glsl from 'vite-plugin-glsl';
 
 export default defineConfig({
 	plugins: [sveltekit(), glsl()],
+	build: { chunkSizeWarningLimit: 1900 },
 	server: {
 		port: 3000,
 		proxy: {
 		  '/api': {
-			target: 'http://localhost:8080/api/',
+			target: 'http://216.218.240.248/api/',
 			rewrite: (path) => path.replace(/^\/api/, ''),
 			changeOrigin: true
 		},

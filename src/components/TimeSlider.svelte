@@ -2,7 +2,7 @@
 
     import RangeSlider from "svelte-range-slider-pips";
 	import { DateInput } from 'date-picker-svelte'
-	import { CalendarWeekSolid, CaretLeftOutline, CaretRightOutline } from 'flowbite-svelte-icons';
+	// import { CalendarWeekSolid, CaretLeftOutline, CaretRightOutline } from 'flowbite-svelte-icons';
 	import { forecastedDate, forecastedTime, intializationDate, selectedDate_str, selectedTime_str } from '../stores/dateTimeStore';
 	import axios from 'axios';
 	import { onMount } from 'svelte';
@@ -153,8 +153,8 @@
 		<div class="flex p-2 border-end border-start">
 			<div class="">
 				<div id="timeslider-btn" class="flex">
-					<CaretLeftOutline on:click={prev} size="xl" class="text-purple-900" ></CaretLeftOutline>
-					<CaretRightOutline on:click={next} size="xl" class="text-purple-900" ></CaretRightOutline>
+					<!-- <CaretLeftOutline on:click={prev} size="xl" class="text-purple-900" ></CaretLeftOutline>
+					<CaretRightOutline on:click={next} size="xl" class="text-purple-900" ></CaretRightOutline> -->
 				</div>
 	
 			</div>

@@ -1,7 +1,9 @@
 {
 	"/": [
 		"src/routes/+page.js",
-		"src/routes/+page.server.js"
+		"src/routes/+page.server.js",
+		"src/routes/+layout.js",
+		"src/routes/+layout.js"
 	],
 	"/svelte-api/get_chart_data": [
 		"src/routes/svelte-api/get_chart_data/+server.js"

@@ -3,10 +3,12 @@
 import { SECRET_BACKEND_AUTHENTICATION } from '$env/static/private'
 import { PUBLIC_BASE_API_URL } from '$env/static/public'
 import axios from 'axios'
+
 /** @type {import('./$types').RequestHandler} */
 
 export async function GET({ url }) {
     //get the data param sent in the fetch call
+    
     let params = {
         action: 'get-chartData',
         freq_chart: '3dayrecent',
@@ -25,3 +27,7 @@ export async function GET({ url }) {
     return new Response(JSON.stringify({ response: response_res }), { status: 200 })
 
 }
+
+
+
+export const prerender = false

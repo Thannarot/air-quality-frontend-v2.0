@@ -1,9 +1,7 @@
-import { n as noop, c as create_ssr_component, a as subscribe, s as setContext, b as add_attribute, d as set_store_value, e as escape, f as each, h as createEventDispatcher, v as validate_component, i as add_styles, j as compute_rest_props, g as getContext, k as spread, l as escape_object, o as escape_attribute_value, p as onDestroy } from "../../chunks/ssr.js";
+import { n as noop, c as create_ssr_component, a as subscribe, b as setContext, d as add_attribute, f as set_store_value, e as escape, h as each, i as createEventDispatcher, v as validate_component, j as add_styles, k as compute_rest_props, g as getContext, l as spread, o as escape_object, p as escape_attribute_value, q as onDestroy } from "../../chunks/ssr.js";
 import mapboxgl from "mapbox-gl";
-import axios from "axios";
-import qs from "qs";
 import Chart from "chart.js/auto";
-import "@mapbox/mapbox-gl-draw";
+import { a as PUBLIC_MAPBOX_KEY, b as PUBLIC_BASE_WMS_URL, c as PUBLIC_BASE_FRIMS_WMS_URL } from "../../chunks/public.js";
 import { w as writable } from "../../chunks/index.js";
 import { twMerge } from "tailwind-merge";
 import "d3";
@@ -34,8 +32,6 @@ function loop(callback) {
     }
   };
 }
-const PUBLIC_BASE_API_URL = "http://localhost:8080/api/";
-const PUBLIC_BASE_WMS_URL = "http://216.218.240.247:8080/thredds/wms/";
 const contextKey = {};
 const forecastedDate = writable("");
 const forecastedTime = writable("");
@@ -188,12 +184,10 @@ const MapBox = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let $ShowFire, $$unsubscribe_ShowFire;
   let $selectedFire, $$unsubscribe_selectedFire;
   let $baseMapStyle, $$unsubscribe_baseMapStyle;
-  let $intializationDate, $$unsubscribe_intializationDate;
-  let $selectedProductLayer, $$unsubscribe_selectedProductLayer;
   let $forecastedTime, $$unsubscribe_forecastedTime;
   let $forecastedDate, $$unsubscribe_forecastedDate;
-  let $$unsubscribe_drawType;
-  let $$unsubscribe_drawCoords;
+  let $intializationDate, $$unsubscribe_intializationDate;
+  let $selectedProductLayer, $$unsubscribe_selectedProductLayer;
   let $PollutantTileUrl, $$unsubscribe_PollutantTileUrl;
   $$unsubscribe_selectedProduct = subscribe(selectedProduct, (value) => $selectedProduct = value);
   $$unsubscribe_selectedPollutant = subscribe(selectedPollutant, (value) => $selectedPollutant = value);
@@ -202,138 +196,32 @@ const MapBox = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   $$unsubscribe_ShowFire = subscribe(ShowFire, (value) => $ShowFire = value);
   $$unsubscribe_selectedFire = subscribe(selectedFire, (value) => $selectedFire = value);
   $$unsubscribe_baseMapStyle = subscribe(baseMapStyle, (value) => $baseMapStyle = value);
-  $$unsubscribe_intializationDate = subscribe(intializationDate, (value) => $intializationDate = value);
-  $$unsubscribe_selectedProductLayer = subscribe(selectedProductLayer, (value) => $selectedProductLayer = value);
   $$unsubscribe_forecastedTime = subscribe(forecastedTime, (value) => $forecastedTime = value);
   $$unsubscribe_forecastedDate = subscribe(forecastedDate, (value) => $forecastedDate = value);
-  $$unsubscribe_drawType = subscribe(drawType, (value) => value);
-  $$unsubscribe_drawCoords = subscribe(drawCoords, (value) => value);
+  $$unsubscribe_intializationDate = subscribe(intializationDate, (value) => $intializationDate = value);
+  $$unsubscribe_selectedProductLayer = subscribe(selectedProductLayer, (value) => $selectedProductLayer = value);
   $$unsubscribe_PollutantTileUrl = subscribe(PollutantTileUrl, (value) => $PollutantTileUrl = value);
   let { map } = $$props;
-  let { Draw } = $$props;
   let mapContainer;
   let currentFire = "";
   setContext(contextKey, {
     getMap: () => map,
     getMapBoxDraw: () => Draw
   });
-  mapboxgl.accessToken = "pk.eyJ1Ijoic2VydmlybWVrb25nIiwiYSI6ImNrYWMzenhldDFvNG4yeXBtam1xMTVseGoifQ.Wr-FBcvcircZ0qyItQTq9g";
-  function addTileMap(pollutant, prod) {
-    console.log("addTileMap");
-    console.log($selectedPollutant);
-    console.log($selectedProduct);
-    console.log($selectedProductLayer);
-    setTimeout(
-      () => {
-        clearLayer(map, "wms-layer");
-        clearSource(map, "wms-source");
-        const initDate = $intializationDate.replace("-", "").replace("-", "");
-        console.log("Initialization Date", initDate);
-        if (pollutant === "pm25") {
-          if (prod === "geos") {
-            set_store_value(
-              PollutantTileUrl,
-              $PollutantTileUrl = `${PUBLIC_BASE_WMS_URL}/ServirData/${$selectedProduct}/${initDate}.nc?service=WMS
-					&request=GetMap
-					&layers=${$selectedProductLayer}
-					&styles=default-scalar%2Fpm25
-					&format=image%2Fpng
-					&transparent=true
-					&version=1.3.0
-					&time=${$forecastedDate}T${$forecastedTime.replace("h", "")}:30:00Z
-					&colorscalerange=0%2C200
-					&abovemaxcolor=extend
-					&belowmincolor=extend
-					&width=256
-					&height=256
-					&crs=EPSG:3857
-					&bbox={bbox-epsg-3857}`,
-              $PollutantTileUrl
-            );
-          } else if (prod === "geos5") {
-            set_store_value(
-              PollutantTileUrl,
-              $PollutantTileUrl = `${PUBLIC_BASE_WMS_URL}/ServirData/${$selectedProduct}/20230507.nc?service=WMS
-					&request=GetMap
-					&layers=${$selectedProductLayer}
-					&styles=default-scalar%2Fpm25
-					&format=image/png;mode=32bit
-					&transparent=true
-					&version=1.3.0
-					&time=2023-05-7T${$forecastedTime.replace("h", "")}:30:00Z
-					&colorscalerange=0%2C200
-					&abovemaxcolor=extend
-					&belowmincolor=extend
-					&width=256
-					&height=256
-					&crs=EPSG:3857
-					&bbox={bbox-epsg-3857}`,
-              $PollutantTileUrl
-            );
-          }
-        }
-        if (pollutant === "no2") {
-          set_store_value(
-            PollutantTileUrl,
-            $PollutantTileUrl = `${PUBLIC_BASE_WMS_URL}/ServirData/${$selectedProduct}/GEMS_NO2_20240228_0645_FC_SERVIRSEA.nc?service=WMS
-				&request=GetMap
-				&layers=${$selectedPollutant}
-				&styles=default-scalar%2Fno2
-				&format=image%2Fpng
-				&transparent=true
-				&version=1.3.0
-				&colorscalerange=0%2C5
-				&abovemaxcolor=extend
-				&belowmincolor=extend
-				&width=256&height=256
-				&crs=EPSG:3857
-				&bbox={bbox-epsg-3857}`,
-            $PollutantTileUrl
-          );
-        }
-        map.addSource("wms-source", {
-          type: "raster",
-          tiles: [$PollutantTileUrl],
-          tileSize: 256
-        });
-        map.addLayer(
-          {
-            id: "wms-layer",
-            // Place layer under labels, roads and buildings.
-            name: "wms-layer",
-            type: "raster",
-            source: "wms-source",
-            paint: {}
-          },
-          "building"
-          // Place layer under labels, roads and buildings.
-        );
-        map.setPaintProperty("wms-layer", "raster-opacity", 0.7);
-        let layers = map.getStyle().layers;
-        let layerIds = layers.map((l) => l.id);
-        if (layerIds.includes("fire-wms-layer")) {
-          console.log("fire layer active");
-          map.moveLayer("wms-layer", "fire-wms-layer");
-        }
-      },
-      200
-    );
-  }
+  mapboxgl.accessToken = PUBLIC_MAPBOX_KEY;
   function addFireTileMap(layername) {
     currentFire = layername;
     setTimeout(
       () => {
         clearLayer(map, "fire-wms-layer");
         clearSource(map, "fire-wms-source");
-        const initDate = $intializationDate.replace("-", "").replace("-", "");
-        console.log("Initialization Date", initDate);
-        let firetileurl = `https://firms.modaps.eosdis.nasa.gov/mapserve/wms/fires/37601af187a7c4054759a42043b19adc/?REQUEST=GetMap&layers=fires_viirs_24&WIDTH=512&HEIGHT=512&bbox={bbox-epsg-3857}0&SRS=EPSG:3857`;
+        let firetileurl = PUBLIC_BASE_FRIMS_WMS_URL + `?REQUEST=GetMap&layers=fires_viirs_24&WIDTH=512&HEIGHT=512&bbox={bbox-epsg-3857}0&SRS=EPSG:3857`;
         if (layername === "fires_viirs_24") {
-          firetileurl = `https://firms.modaps.eosdis.nasa.gov/mapserver/wms/fires/37601af187a7c4054759a42043b19adc/?REQUEST=GetMap&layers=${layername}&WIDTH=512&HEIGHT=512&bbox={bbox-epsg-3857}0&SRS=EPSG:3857`;
+          firetileurl = PUBLIC_BASE_FRIMS_WMS_URL + `?REQUEST=GetMap&layers=${layername}&WIDTH=512&HEIGHT=512&bbox={bbox-epsg-3857}0&SRS=EPSG:3857`;
         } else if (layername === "fires_viirs_48") {
-          firetileurl = `https://firms.modaps.eosdis.nasa.gov/mapserver/wms/fires/37601af187a7c4054759a42043b19adc/?REQUEST=GetMap&layers=${layername}&WIDTH=512&HEIGHT=512&bbox={bbox-epsg-3857}0&SRS=EPSG:3857`;
+          firetileurl = PUBLIC_BASE_FRIMS_WMS_URL + `?REQUEST=GetMap&layers=${layername}&WIDTH=512&HEIGHT=512&bbox={bbox-epsg-3857}0&SRS=EPSG:3857`;
         } else if (layername === "fires_viirs_time") {
-          firetileurl = `https://firms.modaps.eosdis.nasa.gov/mapserver/wms/fires/37601af187a7c4054759a42043b19adc/?REQUEST=GetMap&layers=fires_viirs&TIME=${$forecastedDate}&WIDTH=512&HEIGHT=512&bbox={bbox-epsg-3857}0&SRS=EPSG:3857`;
+          firetileurl = PUBLIC_BASE_FRIMS_WMS_URL + `?REQUEST=GetMap&layers=fires_viirs&TIME=${$forecastedDate}&WIDTH=512&HEIGHT=512&bbox={bbox-epsg-3857}0&SRS=EPSG:3857`;
         }
         map.addSource("fire-wms-source", {
           type: "raster",
@@ -356,44 +244,40 @@ const MapBox = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       200
     );
   }
-  function updateTileMap(pollutant, prod) {
-    console.log("updateTileMap");
+  function addTileMap(pollutant, prod) {
     setTimeout(
       () => {
-        const initDate = $intializationDate.replace("-", "").replace("-", "");
+        clearLayer(map, "wms-layer");
+        clearSource(map, "wms-source");
+        let initDate = $intializationDate.substr(0, 4) + "-" + $intializationDate.substr(4, 2) + "-" + $intializationDate.substr(6, 2);
+        let date1 = new Date(initDate);
+        let date2 = new Date($forecastedDate);
+        let ncFileName = "";
         if (pollutant === "pm25") {
-          if (prod === "geos") {
+          if (date1 > date2) {
+            ncFileName = $forecastedDate.replace("-", "").replace("-", "");
+          } else if (date1 < date2) {
+            ncFileName = $intializationDate;
+            let next2DaysFromLatestDataDate = moment(date1).add(2, "days");
+            if (date2 > next2DaysFromLatestDataDate) {
+              alert("No available data for " + $forecastedDate);
+              ncFileName = "";
+            }
+          } else {
+            ncFileName = $forecastedDate.replace("-", "").replace("-", "");
+          }
+          if (ncFileName !== "") {
             set_store_value(
               PollutantTileUrl,
-              $PollutantTileUrl = `${PUBLIC_BASE_WMS_URL}/ServirData/${$selectedProduct}/${initDate}.nc?service=WMS
+              $PollutantTileUrl = `${PUBLIC_BASE_WMS_URL}/ServirData/${$selectedProduct}/${ncFileName}.nc?service=WMS
 					&request=GetMap
 					&layers=${$selectedProductLayer}
 					&styles=default-scalar%2Fpm25
-					&format=image%2Fpng
+					&format=image/png
 					&transparent=true
 					&version=1.3.0
 					&time=${$forecastedDate}T${$forecastedTime.replace("h", "")}:30:00Z
-					&colorscalerange=0%2C200
-					&abovemaxcolor=extend
-					&belowmincolor=extend
-					&width=256
-					&height=256
-					&crs=EPSG:3857
-					&bbox={bbox-epsg-3857}`,
-              $PollutantTileUrl
-            );
-          } else if (prod === "geos5") {
-            set_store_value(
-              PollutantTileUrl,
-              $PollutantTileUrl = `${PUBLIC_BASE_WMS_URL}/ServirData/${$selectedProduct}/20230507.nc?service=WMS
-					&request=GetMap
-					&layers=${$selectedProductLayer}
-					&styles=default-scalar%2Fpm25
-					&format=image/png;mode=32bit
-					&transparent=true
-					&version=1.3.0
-					&time=2023-05-7T${$forecastedTime.replace("h", "")}:30:00Z
-					&colorscalerange=0%2C200
+					&colorscalerange=0%2C300
 					&abovemaxcolor=extend
 					&belowmincolor=extend
 					&width=256
@@ -405,9 +289,10 @@ const MapBox = create_ssr_component(($$result, $$props, $$bindings, slots) => {
           }
         }
         if (pollutant === "no2") {
+          ncFileName = "GEMS_NO2_20240228_0645_FC_SERVIRSEA";
           set_store_value(
             PollutantTileUrl,
-            $PollutantTileUrl = `${PUBLIC_BASE_WMS_URL}/ServirData/${$selectedProduct}/GEMS_NO2_20240228_0645_FC_SERVIRSEA.nc?service=WMS
+            $PollutantTileUrl = `${PUBLIC_BASE_WMS_URL}/ServirData/${$selectedProduct}/${ncFileName}.nc?service=WMS
 				&request=GetMap
 				&layers=${$selectedProductLayer}
 				&styles=default-scalar%2Fno2
@@ -417,15 +302,119 @@ const MapBox = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 				&colorscalerange=0%2C5
 				&abovemaxcolor=extend
 				&belowmincolor=extend
-				&width=256&height=256
+				&width=256
+				&height=256
 				&crs=EPSG:3857
 				&bbox={bbox-epsg-3857}`,
             $PollutantTileUrl
           );
         }
-        map.getSource("wms-source").setTiles([$PollutantTileUrl]);
+        if (ncFileName !== "") {
+          map.addSource("wms-source", {
+            type: "raster",
+            tiles: [$PollutantTileUrl],
+            tileSize: 256
+          });
+          map.addLayer(
+            {
+              id: "wms-layer",
+              // Place layer under labels, roads and buildings.
+              name: "wms-layer",
+              type: "raster",
+              source: "wms-source",
+              paint: {
+                "raster-fade-duration": 0,
+                "raster-opacity": 0.7
+              }
+            },
+            "building"
+            // Place layer under labels, roads and buildings.
+          );
+          let layers = map.getStyle().layers;
+          let layerIds = layers.map((l) => l.id);
+          if (layerIds.includes("fire-wms-layer")) {
+            console.log("fire layer active");
+            map.moveLayer("wms-layer", "fire-wms-layer");
+          }
+        }
       },
       200
+    );
+  }
+  function updateTiles(pollutant, prod) {
+    setTimeout(
+      () => {
+        let initDate = $intializationDate.substr(0, 4) + "-" + $intializationDate.substr(4, 2) + "-" + $intializationDate.substr(6, 2);
+        let date1 = new Date(initDate);
+        let date2 = new Date($forecastedDate);
+        let ncFileName = "";
+        if (pollutant === "pm25") {
+          if (date1 > date2) {
+            ncFileName = $forecastedDate.replace("-", "").replace("-", "");
+          } else if (date1 < date2) {
+            ncFileName = $intializationDate;
+            let next2DaysFromLatestDataDate = moment(date1).add(2, "days");
+            if (date2 > next2DaysFromLatestDataDate) {
+              alert("No available data for " + $forecastedDate);
+              ncFileName = "";
+            }
+          } else {
+            ncFileName = $forecastedDate.replace("-", "").replace("-", "");
+          }
+          if (ncFileName !== "") {
+            set_store_value(
+              PollutantTileUrl,
+              $PollutantTileUrl = `${PUBLIC_BASE_WMS_URL}/ServirData/${$selectedProduct}/${ncFileName}.nc?service=WMS
+					&request=GetMap
+					&layers=${$selectedProductLayer}
+					&styles=default-scalar%2Fpm25
+					&format=image/png
+					&transparent=true
+					&version=1.3.0
+					&time=${$forecastedDate}T${$forecastedTime.replace("h", "")}:30:00Z
+					&colorscalerange=0%2C300
+					&abovemaxcolor=extend
+					&belowmincolor=extend
+					&width=256
+					&height=256
+					&crs=EPSG:3857
+					&bbox={bbox-epsg-3857}`,
+              $PollutantTileUrl
+            );
+          }
+        }
+        if (pollutant === "no2") {
+          ncFileName = "GEMS_NO2_20240228_0645_FC_SERVIRSEA";
+          set_store_value(
+            PollutantTileUrl,
+            $PollutantTileUrl = `${PUBLIC_BASE_WMS_URL}/ServirData/${$selectedProduct}/${ncFileName}.nc?service=WMS
+				&request=GetMap
+				&layers=${$selectedProductLayer}
+				&styles=default-scalar%2Fno2
+				&format=image%2Fpng
+				&transparent=true
+				&version=1.3.0
+				&colorscalerange=0%2C5
+				&abovemaxcolor=extend
+				&belowmincolor=extend
+				&width=256
+				&height=256
+				&crs=EPSG:3857
+				&bbox={bbox-epsg-3857}`,
+            $PollutantTileUrl
+          );
+        }
+        map.getSource("wms-source").tiles = [$PollutantTileUrl];
+        map.style._sourceCaches["other:wms-source"].clearTiles();
+        map.style._sourceCaches["other:wms-source"].update(map.transform);
+        let layers = map.getStyle().layers;
+        let layerIds = layers.map((l) => l.id);
+        if (layerIds.includes("fire-wms-layer")) {
+          console.log("fire layer active");
+          map.moveLayer("wms-layer", "fire-wms-layer");
+        }
+      },
+      50
     );
   }
   function getMap() {
@@ -433,23 +422,16 @@ const MapBox = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   }
   if ($$props.map === void 0 && $$bindings.map && map !== void 0)
     $$bindings.map(map);
-  if ($$props.Draw === void 0 && $$bindings.Draw && Draw !== void 0)
-    $$bindings.Draw(Draw);
   if ($$props.getMap === void 0 && $$bindings.getMap && getMap !== void 0)
     $$bindings.getMap(getMap);
   {
     if ($intializationDate !== "") {
-      addTileMap($selectedPollutant, $selectedProduct);
+      addTileMap($selectedPollutant);
     }
   }
   {
-    if ($forecastedDate !== "" && $forecastedTime !== "" && $intializationDate !== "" && map.getLayer("wms-layer")) {
-      updateTileMap($selectedPollutant, $selectedProduct);
-    }
-  }
-  {
-    if ($selectedProductLayer && $intializationDate !== "" && map.getLayer("wms-layer")) {
-      updateTileMap($selectedPollutant, $selectedProduct);
+    if ($selectedProductLayer && $intializationDate !== "" && $forecastedDate !== "" && $forecastedTime !== "" && map.getLayer("wms-layer")) {
+      updateTiles($selectedPollutant);
     }
   }
   {
@@ -460,7 +442,7 @@ const MapBox = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       setTimeout(
         () => {
           if (layerIds.includes("wms-layer")) {
-            addTileMap($selectedPollutant, $selectedProduct);
+            updateTiles($selectedPollutant);
           }
           if (layerIds.includes("fire-wms-layer")) {
             addFireTileMap($selectedFire);
@@ -516,14 +498,12 @@ const MapBox = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   $$unsubscribe_ShowFire();
   $$unsubscribe_selectedFire();
   $$unsubscribe_baseMapStyle();
-  $$unsubscribe_intializationDate();
-  $$unsubscribe_selectedProductLayer();
   $$unsubscribe_forecastedTime();
   $$unsubscribe_forecastedDate();
-  $$unsubscribe_drawType();
-  $$unsubscribe_drawCoords();
+  $$unsubscribe_intializationDate();
+  $$unsubscribe_selectedProductLayer();
   $$unsubscribe_PollutantTileUrl();
-  return `<div class="wind-map-container" data-svelte-h="svelte-lapt2t"><canvas id="mapcanvas" class="relative w-full h-screen"></canvas></div> <div id="map-container" class="relative w-full h-screen"${add_attribute("this", mapContainer, 0)}></div>`;
+  return `<div class="wind-map-container" data-svelte-h="svelte-1bm422c"><canvas id="mapcanvas" class="relative w-full h-screen"></canvas></div> <div id="map-container" class="relative w-full h-screen"${add_attribute("this", mapContainer, 0)}></div>`;
 });
 function is_date(obj) {
   return Object.prototype.toString.call(obj) === "[object Date]";
@@ -1703,6 +1683,9 @@ const TimeSlider = create_ssr_component(($$result, $$props, $$bindings, slots) =
   let values = [10];
   let pipstep = 1;
   let hourOptions = [];
+  let today = moment();
+  let tomorrow = moment(today).add(1, "days");
+  console.log(tomorrow);
   const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const months = [
     "Jan",
@@ -1732,7 +1715,6 @@ const TimeSlider = create_ssr_component(($$result, $$props, $$bindings, slots) =
     return times;
   }
   let timeListSlider = timesList("01:00", "24:00", 3);
-  pipstep = 1;
   $$result.css.add(css$5);
   let $$settled;
   let $$rendered;
@@ -1844,21 +1826,18 @@ const AirPollutants = create_ssr_component(($$result, $$props, $$bindings, slots
   $$unsubscribe_selectedProductLayer = subscribe(selectedProductLayer, (value) => $selectedProductLayer = value);
   $$unsubscribe_ShowPollutant = subscribe(ShowPollutant, (value) => $ShowPollutant = value);
   $$unsubscribe_selectOptions = subscribe(selectOptions, (value) => $selectOptions = value);
-  selectedProduct.set("geos5");
+  selectedProduct.set("geos5km");
   selectedPollutant.set("pm25");
   selectedProductLayer.set("BC_DNN_PM25");
-  let { hiddenDrawer: hiddenDrawer2 = true } = $$props;
   set_store_value(ShowPollutant, $ShowPollutant = true, $ShowPollutant);
   let satellite_options = [];
   let listProductLayers = {
     "pm25": {
-      "geos": "BC_MLPM25",
-      "geos5": "BC_DNN_PM25"
+      "geos5km": "DS_BC_DNN_PM25",
+      "geos25km": "BC_DNN_PM25"
     },
     "no2": { "gems": "ColumnAmountNO2Trop" }
   };
-  if ($$props.hiddenDrawer === void 0 && $$bindings.hiddenDrawer && hiddenDrawer2 !== void 0)
-    $$bindings.hiddenDrawer(hiddenDrawer2);
   $$result.css.add(css$3);
   {
     if ($selectedPollutant === "no2") {
@@ -1873,18 +1852,14 @@ const AirPollutants = create_ssr_component(($$result, $$props, $$bindings, slots
   {
     if ($selectedPollutant === "pm25") {
       satellite_options = [
-        { value: "geos", name: "GEOS-ML 25x25km" },
-        { value: "geos5", name: "GEOS-ML 5x5km" }
+        {
+          value: "geos25km",
+          name: "GEOS-ML 25x25km"
+        },
+        { value: "geos5km", name: "GEOS-ML 5x5km" }
       ];
       set_store_value(selectOptions, $selectOptions = satellite_options, $selectOptions);
-      set_store_value(selectedProduct, $selectedProduct = "geos5", $selectedProduct);
-    }
-  }
-  {
-    if ($selectedPollutant === "pm10") {
-      satellite_options = [{ value: "geos", name: "GEOS-ML 25x25km" }];
-      set_store_value(selectOptions, $selectOptions = satellite_options, $selectOptions);
-      set_store_value(selectedProduct, $selectedProduct = "geos", $selectedProduct);
+      set_store_value(selectedProduct, $selectedProduct = "geos5km", $selectedProduct);
     }
   }
   {
@@ -1931,10 +1906,6 @@ const FireLayerControl = create_ssr_component(($$result, $$props, $$bindings, sl
   $$unsubscribe_selectedFire = subscribe(selectedFire, (value) => value);
   let fire_options = [
     {
-      value: "vfei",
-      name: "VIIRS-based Fire Emission Inventory (VFEI)"
-    },
-    {
       value: "fires_viirs_24",
       name: "VIIRS active fire last 24 hours"
     },
@@ -1945,6 +1916,10 @@ const FireLayerControl = create_ssr_component(($$result, $$props, $$bindings, sl
     {
       value: "fires_viirs_time",
       name: "VIIRS active fire for a single day"
+    },
+    {
+      value: "vfei",
+      name: "VIIRS-based Fire Emission Inventory"
     }
   ];
   setTimeout(
@@ -2415,27 +2390,23 @@ const BottomDrawer = create_ssr_component(($$result, $$props, $$bindings, slots)
   let chartCanvasBottom;
   let chartBottom;
   let transitionParamsBottom = { y: 320, duration: 200, easing: sineIn };
-  async function getChartData2(drawCoords2, drawType2) {
-    let dataUrl = PUBLIC_BASE_API_URL + "/mapclient";
+  async function getTimeSeriesData(drawCoords2, drawType2) {
     const initDate = $intializationDate.replace("-", "").replace("-", "");
-    console.log(drawCoords2);
-    let params = {
-      action: "get-chartData",
-      freq_chart: "3dayrecent",
-      geom_data: drawCoords2,
-      interaction: drawType2,
-      run_date_chart: initDate + ".nc",
-      run_type_chart: "geos",
-      variable: "BC_MLPM25"
-    };
-    const res = await axios.get(dataUrl, {
-      params,
-      headers: {
-        Authorization: `admin.KRg06uWinwXAL5SRRCBSmH2HON4tZKdpCItHpbZh7HghJFFH6mIizlNM01`
-      }
-    });
-    if (res.data) {
-      let fetchData = res.data.data;
+    const response = await fetch(
+      "/svelte-api/get_chart_data?" + new URLSearchParams({
+        action: "get-chartData",
+        freq_chart: "3dayrecent",
+        geom_data: drawCoords2,
+        interaction: drawType2,
+        run_date_chart: initDate + ".nc",
+        run_type_chart: "geos",
+        variable: "BC_MLPM25"
+      }),
+      { method: "GET" }
+    );
+    let res = await response.json();
+    if (res) {
+      let fetchData = res.response;
       let pm25Data = fetchData.plot;
       let lables = pm25Data.map((tuple) => new Date(tuple[0]).toLocaleString("en-GB", { hour12: false }));
       pm25Data.map(function(tuple) {
@@ -2522,7 +2493,7 @@ const BottomDrawer = create_ssr_component(($$result, $$props, $$bindings, slots)
     {
       if ($hiddenBottomDrawer === false) {
         let coor = $locy.toString() + "," + $locx.toString();
-        getChartData2(coor, "Point");
+        getTimeSeriesData(coor, "Point");
       }
     }
     $$rendered = `${validate_component(Drawer, "Drawer").$$render(
@@ -2575,8 +2546,6 @@ const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let $drawCoords, $$unsubscribe_drawCoords;
   let $showChartModal, $$unsubscribe_showChartModal;
   let $pcdshow, $$unsubscribe_pcdshow;
-  let $forecastedTime, $$unsubscribe_forecastedTime;
-  let $forecastedDate, $$unsubscribe_forecastedDate;
   let $intializationDate, $$unsubscribe_intializationDate;
   let $selectedFire, $$unsubscribe_selectedFire;
   let $hiddenBottomDrawer, $$unsubscribe_hiddenBottomDrawer;
@@ -2590,8 +2559,6 @@ const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   $$unsubscribe_drawCoords = subscribe(drawCoords, (value) => $drawCoords = value);
   $$unsubscribe_showChartModal = subscribe(showChartModal, (value) => $showChartModal = value);
   $$unsubscribe_pcdshow = subscribe(pcdshow, (value) => $pcdshow = value);
-  $$unsubscribe_forecastedTime = subscribe(forecastedTime, (value) => $forecastedTime = value);
-  $$unsubscribe_forecastedDate = subscribe(forecastedDate, (value) => $forecastedDate = value);
   $$unsubscribe_intializationDate = subscribe(intializationDate, (value) => $intializationDate = value);
   $$unsubscribe_selectedFire = subscribe(selectedFire, (value) => $selectedFire = value);
   $$unsubscribe_hiddenBottomDrawer = subscribe(hiddenBottomDrawer, (value) => $hiddenBottomDrawer = value);
@@ -2662,26 +2629,22 @@ const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
     200
   );
   async function getChartData(drawCoords2, drawType2) {
-    let dataUrl = PUBLIC_BASE_API_URL + "/mapclient";
-    const initDate = $intializationDate.replace("-", "").replace("-", "");
-    console.log(drawCoords2);
-    let params = {
-      action: "get-chartData",
-      freq_chart: "3dayrecent",
-      geom_data: drawCoords2,
-      interaction: drawType2,
-      run_date_chart: initDate + ".nc",
-      run_type_chart: "geos",
-      variable: "BC_MLPM25"
-    };
-    const res = await axios.get(dataUrl, {
-      params,
-      headers: {
-        Authorization: `admin.KRg06uWinwXAL5SRRCBSmH2HON4tZKdpCItHpbZh7HghJFFH6mIizlNM01`
-      }
-    });
-    if (res.data) {
-      let fetchData = res.data.data;
+    const initDate = $intializationDate;
+    const response = await fetch(
+      "/svelte-api/get_chart_data?" + new URLSearchParams({
+        action: "get-chartData",
+        freq_chart: "3dayrecent",
+        geom_data: drawCoords2,
+        interaction: drawType2,
+        run_date_chart: initDate + ".nc",
+        run_type_chart: "geos",
+        variable: "BC_MLPM25"
+      }),
+      { method: "GET" }
+    );
+    let res = await response.json();
+    if (res) {
+      let fetchData = res.response;
       let pm25Data = fetchData.plot;
       let lables = pm25Data.map((tuple) => new Date(tuple[0]).toLocaleString("en-GB", { hour12: false }));
       let barColors = pm25Data.map(function(tuple) {
@@ -2712,21 +2675,9 @@ const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
     console.log(res.data);
   }
   async function getStations() {
-    let dataUrl = PUBLIC_BASE_API_URL + "/mapclient";
-    let selectedDate = $forecastedDate + "+" + $forecastedTime.replace("h", "") + ":00:00";
-    console.log(selectedDate);
-    let params = {
-      action: "get-stations",
-      obs_date: "2024-01-09+11:00:00"
-    };
-    const res = await axios.get(dataUrl, {
-      params,
-      paramsSerializer: (params2) => qs.stringify(params2, { encode: false }),
-      headers: {
-        Authorization: `admin.KRg06uWinwXAL5SRRCBSmH2HON4tZKdpCItHpbZh7HghJFFH6mIizlNM01`
-      }
-    });
-    let geojsons = createFeatureCollection(res.data.data);
+    const response = await fetch("/svelte-api/get_station?data=2024-01-09+11:00:00", { method: "GET" });
+    let res = await response.json();
+    let geojsons = createFeatureCollection(res.response);
     createMarker(map, mapboxgl, geojsons);
   }
   $$result.css.add(css);
@@ -2754,7 +2705,7 @@ const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
     {
       if (!$hiddenDrawer) {
         document.querySelectorAll("#right-component").forEach((el) => el.style.right = "330px");
-        document.querySelectorAll("#timeslider").forEach((el) => el.style.justifyContent = "right");
+        document.querySelectorAll("#timeslider").forEach((el) => el.style.justifyContent = "center");
       }
     }
     {
@@ -2821,8 +2772,6 @@ const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   $$unsubscribe_drawCoords();
   $$unsubscribe_showChartModal();
   $$unsubscribe_pcdshow();
-  $$unsubscribe_forecastedTime();
-  $$unsubscribe_forecastedDate();
   $$unsubscribe_intializationDate();
   $$unsubscribe_selectedFire();
   $$unsubscribe_hiddenBottomDrawer();

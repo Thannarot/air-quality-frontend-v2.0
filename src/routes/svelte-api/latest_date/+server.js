@@ -23,3 +23,5 @@ export async function GET({ url }) {
     return new Response(JSON.stringify({ response: response_res }), { status: 200 })
 
 }
+
+export const prerender = false

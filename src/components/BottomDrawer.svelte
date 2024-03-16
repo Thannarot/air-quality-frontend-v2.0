@@ -3,7 +3,7 @@
 	import { Drawer, Button, CloseButton, Badge } from 'flowbite-svelte';
 	import { InfoCircleSolid, ArrowRightOutline } from 'flowbite-svelte-icons';
 	import { sineIn } from 'svelte/easing';
-	import { hiddenBottomDrawer, locx, locy, locname } from '../stores/app';
+	import { hiddenBottomDrawer, locx, locy, locname,  } from '../stores/app';
 	import { forecastedTime, forecastedDate, intializationDate } from '../stores/dateTimeStore';
 
 	import qs from 'qs';
@@ -24,26 +24,26 @@
 		easing: sineIn
 	};
 
-	async function getChartData2(drawCoords, drawType) {
-		let dataUrl = PUBLIC_BASE_API_URL + '/mapclient';
-		const initDate = $intializationDate.replace('-', '').replace('-', '');
-		console.log(drawCoords);
-		let params = {
-			action: 'get-chartData',
-			freq_chart: '3dayrecent',
-			geom_data: drawCoords,
-			interaction: drawType,
-			run_date_chart: initDate + '.nc',
-			run_type_chart: 'geos',
-			variable: 'BC_MLPM25'
-		};
-		const res = await axios.get(dataUrl, {
-			params,
-			headers: { Authorization: `admin.KRg06uWinwXAL5SRRCBSmH2HON4tZKdpCItHpbZh7HghJFFH6mIizlNM01` }
-		});
+	async function getTimeSeriesData(drawCoords, drawType) {
 
-		if (res.data) {
-			let fetchData = res.data.data;
+		const initDate = $intializationDate.replace('-', '').replace('-', '');
+		const response =  await fetch('/svelte-api/get_chart_data?'+ new URLSearchParams({
+				action: 'get-chartData',
+				freq_chart: '3dayrecent',
+				geom_data: drawCoords,
+				interaction: drawType,
+				run_date_chart: initDate + '.nc',
+				run_type_chart: 'geos',
+				variable: 'BC_MLPM25'
+			})
+			,{
+				method: 'GET'
+			});
+
+		let res = await response.json();
+
+		if (res) {
+			let fetchData = res.response;
 			let pm25Data = fetchData.plot;
 			let lables = pm25Data.map((tuple) =>
 				new Date(tuple[0]).toLocaleString('en-GB', {
@@ -139,7 +139,7 @@
 
 	$: if ($hiddenBottomDrawer === false) {
 		let coor = $locy.toString() + ',' + $locx.toString();
-		getChartData2(coor, 'Point');
+		getTimeSeriesData(coor, 'Point');
 	}
 </script>
 

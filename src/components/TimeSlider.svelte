@@ -2,16 +2,24 @@
 
     import RangeSlider from "svelte-range-slider-pips";
 	import { DateInput } from 'date-picker-svelte'
-	import { CalendarWeekSolid, CaretLeftOutline, CaretRightOutline } from 'flowbite-svelte-icons';
+	import { CaretLeftOutline, CaretRightOutline } from 'flowbite-svelte-icons';
 	import { forecastedDate, forecastedTime, intializationDate, selectedDate_str, selectedTime_str } from '../stores/dateTimeStore';
 	import axios from 'axios';
 	import { onMount } from 'svelte';
+	// import { PUBLIC_BACKEND_AUTHENTICATION } from "$env/static/private";
+	// import { PUBLIC_BACKEND_AUTHENTICATION } from "$env/static/public";
+	// import { SECRET_BACKEND_AUTHENTICATION } from "$env/static/private";
+
 
 	let date = new Date();
 	let picker_date = new Date();
 	let values = [10];
 	let pipstep = 1;
 	let hourOptions = [];
+
+	let today = moment();
+	let tomorrow = moment(today).add(1, 'days');
+	console.log(tomorrow)
 
 
 	const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -52,29 +60,6 @@
 		return(times)
 	};
 	let timeListSlider = timesList("01:00","24:00",3)
-	pipstep = 1;
-
-	async function getInitDate(forecastTime, nowDateString) {
-      let dataUrl = "/api/mapclient/";
-      let params = {
-        action: 'get-latest-date',
-        dataset: 'geos'
-      }
-
-	await axios.get(dataUrl,
-	{
-		params,
-		headers: { Authorization: `admin.KRg06uWinwXAL5SRRCBSmH2HON4tZKdpCItHpbZh7HghJFFH6mIizlNM01` }
-	}).then(result => {  
-		let initDate = result.data.slice(0, 4) + '-' + result.data.substr(4, 2) + '-' + result.data.substr(6, 2);
-		intializationDate.set(initDate);
-		// Set forecaseted Time 
-		forecastedTime.set(forecastTime);
-		// Forecasted date,  default should be now date 
-		forecastedDate.set(nowDateString);
-	})
-	.catch(error => { console.error(error); throw error; });
-	}
 
 	function next() {
 		if (values[0] === timeListSlider.length - 1){
@@ -102,6 +87,20 @@
 		$selectedTime_str = timeListSlider[event.detail.value]
 	}
 
+	async function setDateTime(forecastTime, nowDateString) {
+		const response =  await fetch('/svelte-api/latest_date?data=geos', {
+				method: 'GET',
+			});
+		let res = await response.json();
+		// Set intializationDate
+		intializationDate.set(res.response);
+		// Set forecaseted Time 
+		forecastedTime.set(forecastTime);
+		// Forecasted date,  default should be now date 
+		forecastedDate.set(nowDateString);
+	}
+
+
 	onMount(async () => {
 		let now_hour = date.getHours();
 		let closestHourOption = hourOptions.reduce(function(prev, curr) {
@@ -111,7 +110,7 @@
 
 		values = [TimeIndexOption];
 		$selectedTime_str = timeListSlider[TimeIndexOption];
-		getInitDate(timeListSlider[TimeIndexOption], nowDateString)
+		setDateTime(timeListSlider[TimeIndexOption], nowDateString)
 	});
 
 

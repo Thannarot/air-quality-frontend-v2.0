@@ -4,13 +4,12 @@
 	import { selectedFire, ShowFire } from '../stores/app';
 
 	let fire_options = [
-		{ value: 'vfei', name: 'VIIRS-based Fire Emission Inventory (VFEI)' },
 		{ value: 'fires_viirs_24', name: 'VIIRS active fire last 24 hours' },
 		{ value: 'fires_viirs_48', name: 'VIIRS active fire last 48 hours' },
-    { value: 'fires_viirs_time', name: 'VIIRS active fire for a single day' }
+    	{ value: 'fires_viirs_time', name: 'VIIRS active fire for a single day' },
+		{ value: 'vfei', name: 'VIIRS-based Fire Emission Inventory' },
 	];
   
-
   setTimeout(()=> {
 		NiceSelect.bind(document.querySelector("#select2-fire"))
 	},100)

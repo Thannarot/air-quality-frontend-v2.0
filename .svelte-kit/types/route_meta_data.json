@@ -1,5 +1,15 @@
 {
 	"/": [
-		"src/routes/+page.js"
+		"src/routes/+page.js",
+		"src/routes/+page.server.js"
+	],
+	"/svelte-api/get_chart_data": [
+		"src/routes/svelte-api/get_chart_data/+server.js"
+	],
+	"/svelte-api/get_station": [
+		"src/routes/svelte-api/get_station/+server.js"
+	],
+	"/svelte-api/latest_date": [
+		"src/routes/svelte-api/latest_date/+server.js"
 	]
 }

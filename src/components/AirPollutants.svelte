@@ -4,21 +4,18 @@
 	import { getLegend } from '../helpers/app';
 
 	// set selected product, pm2.5 geos is a default
-	selectedProduct.set('geos5');
+	selectedProduct.set('geos5km');
 	selectedPollutant.set('pm25');
 	selectedProductLayer.set('BC_DNN_PM25');
 
-
-	export let hiddenDrawer = true;
 	$ShowPollutant = true;
 
 	let satellite_options = [];
-	let niceSelec;
 
 	let listProductLayers = {
 		'pm25': {
-			'geos' : 'BC_MLPM25',
-			'geos5' : 'BC_DNN_PM25'
+			'geos5km' : 'DS_BC_DNN_PM25',
+			'geos25km' : 'BC_DNN_PM25'
 		},
 		'no2': {
 			'gems' : 'ColumnAmountNO2Trop',
@@ -40,24 +37,13 @@
 
 	$: if ($selectedPollutant === 'pm25') {
 		satellite_options = [
-			{ value: 'geos', name: 'GEOS-ML 25x25km' },
-			{ value: 'geos5', name: 'GEOS-ML 5x5km' }
+			{ value: 'geos25km', name: 'GEOS-ML 25x25km' },
+			{ value: 'geos5km', name: 'GEOS-ML 5x5km' }
 		];
 		$selectOptions = satellite_options;
-		$selectedProduct = 'geos5';
+		$selectedProduct = 'geos5km';
 	}
 	
-	$: if ($selectedPollutant === 'pm10') {
-		satellite_options = [
-			{ value: 'geos', name: 'GEOS-ML 25x25km' }
-		];
-		$selectOptions = satellite_options;
-		$selectedProduct = 'geos';
-		// let niceSelect = NiceSelect.bind(document.querySelector("#select2_satellite"))
-		// niceSelect.('update')
-
-	}
-
 	function closePollutantPanel() {
     	$ShowPollutant = false;
   	}
@@ -77,8 +63,8 @@
 			'#FBEAC2',
 			'#FDECC7'
 		];
-		let trickValues = [0, 50, 100, 150, 200];
-		let valueRange = [0, 200];
+		let trickValues = [0, 50, 100, 150, 200, 250, 300];
+		let valueRange = [0, 300];
 		getLegend(colorPalettes, trickValues, valueRange, '#legend');
 	});
 

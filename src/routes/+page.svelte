@@ -108,26 +108,24 @@
 	/////////////////////////////////////  Change Map style    ///////////////////////////////////////
 
 	async function getChartData(drawCoords, drawType) {
-		let dataUrl = PUBLIC_BASE_API_URL + '/mapclient';
-		const initDate = $intializationDate.replace('-', '').replace('-', '');
-		console.log(drawCoords)
-		let params = {
-			action: 'get-chartData',
-			freq_chart: '3dayrecent',
-			geom_data: drawCoords,
-			interaction: drawType,
-			run_date_chart: initDate + '.nc',
-			run_type_chart: 'geos',
-			variable: 'BC_MLPM25'
-		};
-		const res = await axios.get(dataUrl, {
-			params,
-			headers: { Authorization: `admin.KRg06uWinwXAL5SRRCBSmH2HON4tZKdpCItHpbZh7HghJFFH6mIizlNM01` }
-		});
+		const initDate = $intializationDate;
+		const response =  await fetch('/svelte-api/get_chart_data?'+ new URLSearchParams({
+				action: 'get-chartData',
+				freq_chart: '3dayrecent',
+				geom_data: drawCoords,
+				interaction: drawType,
+				run_date_chart: initDate + '.nc',
+				run_type_chart: 'geos',
+				variable: 'BC_MLPM25'
+			})
+			,{
+				method: 'GET'
+			});
+			
+		let res = await response.json();
 
-		if (res.data) {
-			let fetchData = res.data.data;
-
+		if (res) {
+			let fetchData = res.response;
 			let pm25Data = fetchData.plot;
 
 			let lables = pm25Data.map((tuple) =>
@@ -177,21 +175,14 @@
 	}
 
 	async function getStations() {
-		let dataUrl = PUBLIC_BASE_API_URL + '/mapclient';
-		let selectedDate = $forecastedDate + '+' + $forecastedTime.replace('h', '') + ':00:00';
-		console.log(selectedDate);
-		let params = {
-			action: 'get-stations',
-			obs_date: '2024-01-09+11:00:00'
-		};
-		const res = await axios.get(dataUrl, {
-			params,
-			paramsSerializer: (params) => qs.stringify(params, { encode: false }),
-			headers: { Authorization: `admin.KRg06uWinwXAL5SRRCBSmH2HON4tZKdpCItHpbZh7HghJFFH6mIizlNM01` }
-		});
+		// Getting PCD stations data
+		const response =  await fetch('/svelte-api/get_station?data=2024-01-09+11:00:00', {
+				method: 'GET',
+			});
+		let res = await response.json();
 
 		// create feature collection geojson format
-		let geojsons = createFeatureCollection(res.data.data);
+		let geojsons = createFeatureCollection(res.response);
 		// create station markers
 		createMarker(map, mapboxgl, geojsons);
 	}
@@ -222,7 +213,7 @@
        		el => el.style.right = '330px'
   		 );
 		   document.querySelectorAll('#timeslider').forEach(
-       		el => el.style.justifyContent = 'right'
+       		el => el.style.justifyContent = 'center'
   		 );
 	}
 	$: if ($hiddenDrawer) {

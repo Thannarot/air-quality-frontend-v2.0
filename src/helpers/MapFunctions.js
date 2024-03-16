@@ -218,3 +218,69 @@ export function createFeatureCollection(data) {
 
     return geojson
 }
+
+export function getEventObject(map) {
+    const canvas = map.getCanvas();
+    const dimensions = map.getBounds();
+
+    const result = {
+        width: canvas.width,
+        height: canvas.height,
+        north: dimensions.getNorth(),
+        south: dimensions.getSouth(),
+        west: dimensions.getWest(),
+        east: dimensions.getEast(),
+        zoomLevel: map.getZoom()
+    };
+    return result;
+}
+
+export function resetWind(map, windy, timeout) {
+    const obj = getEventObject(map);
+    const { zoomLevel, north, south, west, east, width, height } = obj;
+    mapcanvas.style.display = 'none';
+
+    if (windy) {
+        windy.stop();
+    }
+
+    if (timeout) {
+        clearTimeout(timeout);
+    }
+
+    timeout = setTimeout(function () {
+        let particleWidth = 3;
+        if (zoomLevel > 2) {
+            particleWidth = 4;
+        }
+        if (zoomLevel > 3) {
+            particleWidth = 4.5;
+        }
+        if (zoomLevel > 4) {
+            particleWidth = 4.7;
+        }
+        if (zoomLevel > 5) {
+            particleWidth = 4.8;
+        }
+        if (zoomLevel > 6) {
+            particleWidth = 5;
+        }
+        mapcanvas.style.display = 'initial';
+        mapcanvas.width = width;
+        mapcanvas.height = height;
+        windy.start(
+            [
+                [0, 0],
+                [width, height]
+            ],
+            width,
+            height,
+            [
+                [west, south],
+                [east, north]
+            ],
+            { particleLineWidth: particleWidth, zoomLevel: zoomLevel}
+        );
+    }, 500);
+}
+

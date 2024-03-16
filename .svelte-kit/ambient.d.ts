@@ -26,7 +26,6 @@
  * ```
  */
 declare module '$env/static/private' {
-	export const SECRET_BACKEND_AUTHENTICATION: string;
 	export const MANPATH: string;
 	export const TERM_PROGRAM: string;
 	export const NODE: string;
@@ -128,6 +127,7 @@ declare module '$env/static/public' {
 	export const PUBLIC_BASE_WIND_URL: string;
 	export const PUBLIC_BASE_FRIMS_WMS_URL: string;
 	export const PUBLIC_MAPBOX_KEY: string;
+	export const PUBLIC_BACKEND_AUTHENTICATION: string;
 }
 
 /**
@@ -146,7 +146,6 @@ declare module '$env/static/public' {
  */
 declare module '$env/dynamic/private' {
 	export const env: {
-		SECRET_BACKEND_AUTHENTICATION: string;
 		MANPATH: string;
 		TERM_PROGRAM: string;
 		NODE: string;
@@ -255,6 +254,7 @@ declare module '$env/dynamic/public' {
 		PUBLIC_BASE_WIND_URL: string;
 		PUBLIC_BASE_FRIMS_WMS_URL: string;
 		PUBLIC_MAPBOX_KEY: string;
+		PUBLIC_BACKEND_AUTHENTICATION: string;
 		[key: `PUBLIC_${string}`]: string | undefined;
 	}
 }

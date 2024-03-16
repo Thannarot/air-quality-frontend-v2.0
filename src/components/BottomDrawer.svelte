@@ -9,7 +9,7 @@
 	import qs from 'qs';
 	import Chart from 'chart.js/auto';
 	import { addData, removeData } from '../helpers/Charts.js';
-	import { PUBLIC_BASE_API_URL } from '$env/static/public';
+	import { PUBLIC_BACKEND_AUTHENTICATION ,PUBLIC_BASE_API_URL } from '$env/static/public';
 	import axios from 'axios';
 
 	let ctx2;
@@ -25,25 +25,25 @@
 	};
 
 	async function getTimeSeriesData(drawCoords, drawType) {
-
 		const initDate = $intializationDate.replace('-', '').replace('-', '');
-		const response =  await fetch('/apis/get_chart_data?'+ new URLSearchParams({
-				action: 'get-chartData',
+		let params = {
+			action: 'get-chartData',
 				freq_chart: '3dayrecent',
 				geom_data: drawCoords,
 				interaction: drawType,
 				run_date_chart: initDate + '.nc',
 				run_type_chart: 'geos',
 				variable: 'BC_MLPM25'
-			})
-			,{
-				method: 'GET'
-			});
+		};
 
-		let res = await response.json();
+		let res = await axios.get(PUBLIC_BASE_API_URL, { 
+			params, 
+			headers: { Authorization: PUBLIC_BACKEND_AUTHENTICATION } 
+		})
+		
 
 		if (res) {
-			let fetchData = res.response;
+			let fetchData = res.data.data;
 			let pm25Data = fetchData.plot;
 			let lables = pm25Data.map((tuple) =>
 				new Date(tuple[0]).toLocaleString('en-GB', {

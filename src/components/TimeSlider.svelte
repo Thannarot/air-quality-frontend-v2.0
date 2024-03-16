@@ -7,9 +7,7 @@
 	import axios from 'axios';
 	import { onMount } from 'svelte';
 	// import { PUBLIC_BACKEND_AUTHENTICATION } from "$env/static/private";
-	// import { PUBLIC_BACKEND_AUTHENTICATION } from "$env/static/public";
-	// import { SECRET_BACKEND_AUTHENTICATION } from "$env/static/private";
-
+	import { PUBLIC_BACKEND_AUTHENTICATION, PUBLIC_BASE_API_URL } from "$env/static/public";
 
 	let date = new Date();
 	let picker_date = new Date();
@@ -88,12 +86,16 @@
 	}
 
 	async function setDateTime(forecastTime, nowDateString) {
-		const response =  await fetch('/apis/latest_date?data=geos5km', {
-				method: 'GET',
-			});
-		let res = await response.json();
+		let params = {
+			action: 'get-latest-date',
+      		dataset: 'geos5km'
+    	};
+		let res = await axios.get(PUBLIC_BASE_API_URL, { 
+			params, 
+			headers: { Authorization: PUBLIC_BACKEND_AUTHENTICATION } 
+		})
 		// Set intializationDate
-		intializationDate.set(res.response);
+		intializationDate.set(res.data);
 		// Set forecaseted Time 
 		forecastedTime.set(forecastTime);
 		// Forecasted date,  default should be now date 

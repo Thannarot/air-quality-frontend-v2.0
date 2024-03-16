@@ -1,6 +1,4 @@
 <script type="ts">
-	import { PUBLIC_BASE_API_URL } from '$env/static/public'
-
 	// js components
 	import mapboxgl from 'mapbox-gl';
 	import axios from 'axios';
@@ -28,6 +26,9 @@
 	// helpers
 	import { createMarker, createFeatureCollection } from '../helpers/MapFunctions.js';
 	import { addData, removeData } from '../helpers/Charts.js';
+
+	import { PUBLIC_BACKEND_AUTHENTICATION, PUBLIC_BASE_API_URL } from "$env/static/public";
+
 
 
 	let map;
@@ -109,7 +110,8 @@
 
 	async function getChartData(drawCoords, drawType) {
 		const initDate = $intializationDate;
-		const response =  await fetch('/apis/get_chart_data?'+ new URLSearchParams({
+
+		let params = {
 				action: 'get-chartData',
 				freq_chart: '3dayrecent',
 				geom_data: drawCoords,
@@ -117,15 +119,15 @@
 				run_date_chart: initDate + '.nc',
 				run_type_chart: 'geos',
 				variable: 'BC_MLPM25'
-			})
-			,{
-				method: 'GET'
-			});
-			
-		let res = await response.json();
+    	};
 
+		let res = await axios.get(PUBLIC_BASE_API_URL, { 
+			params, 
+			headers: { Authorization: PUBLIC_BACKEND_AUTHENTICATION } 
+		})
+			
 		if (res) {
-			let fetchData = res.response;
+			let fetchData = res.data.data;
 			let pm25Data = fetchData.plot;
 
 			let lables = pm25Data.map((tuple) =>
@@ -176,13 +178,18 @@
 
 	async function getStations() {
 		// Getting PCD stations data
-		const response =  await fetch('/apis/get_station?data=2024-01-09+11:00:00', {
-				method: 'GET',
-			});
-		let res = await response.json();
+		let params = {
+			action: 'get-stations',
+			obs_date: '2024-01-09 11:00:00'
+		};
 
+    	let res = await axios.get(PUBLIC_BASE_API_URL, { 
+			params, 
+			headers: { Authorization: PUBLIC_BACKEND_AUTHENTICATION } 
+		})
+    
 		// create feature collection geojson format
-		let geojsons = createFeatureCollection(res.response);
+		let geojsons = createFeatureCollection(res.data.data);
 		// create station markers
 		createMarker(map, mapboxgl, geojsons);
 	}

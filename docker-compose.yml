@@ -1,6 +1,6 @@
 version: '3'
 services:
-  aq-app:
+  aq-static:
     image: svelte-docker-static
 
     build:
@@ -9,3 +9,13 @@ services:
       target: deploy-static
     ports:
       - 3000:80
+
+  aq-node:
+    image: svelte-docker-node
+
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: deploy-node
+    ports:
+      - 3000:3000

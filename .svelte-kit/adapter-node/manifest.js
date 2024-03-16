@@ -13,17 +13,9 @@ return {
 		client: {"start":"_app/immutable/entry/start.CU1p7EBU.js","app":"_app/immutable/entry/app.DEgJg8ia.js","imports":["_app/immutable/entry/start.CU1p7EBU.js","_app/immutable/chunks/vendor.BQQJiCKj.js","_app/immutable/entry/app.DEgJg8ia.js","_app/immutable/chunks/vendor.BQQJiCKj.js"],"stylesheets":["_app/immutable/assets/vendor.aG4qna1O.css","_app/immutable/assets/vendor.aG4qna1O.css"],"fonts":[],"uses_env_dynamic_public":false},
 		nodes: [
 			__memo(() => import('./nodes/0.js')),
-			__memo(() => import('./nodes/1.js')),
-			__memo(() => import('./nodes/2.js'))
+			__memo(() => import('./nodes/1.js'))
 		],
 		routes: [
-			{
-				id: "/",
-				pattern: /^\/$/,
-				params: [],
-				page: { layouts: [0,], errors: [1,], leaf: 2 },
-				endpoint: null
-			},
 			{
 				id: "/svelte-api/get_chart_data",
 				pattern: /^\/svelte-api\/get_chart_data\/?$/,
@@ -54,3 +46,7 @@ return {
 	}
 }
 })();
+
+export const prerendered = new Set(["/"]);
+
+export const base = "";

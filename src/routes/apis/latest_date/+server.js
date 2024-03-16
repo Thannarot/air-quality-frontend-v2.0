@@ -8,7 +8,6 @@ import axios from 'axios'
 export async function GET({ url }) {
     //get the data param sent in the fetch call
     const data = url.searchParams.get('data')
-    
     let dataUrl = PUBLIC_BASE_API_URL;
     let params = {
       action: 'get-latest-date',
@@ -23,5 +22,3 @@ export async function GET({ url }) {
     return new Response(JSON.stringify({ response: response_res }), { status: 200 })
 
 }
-
-export const prerender = false

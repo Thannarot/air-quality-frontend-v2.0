@@ -88,7 +88,7 @@
 	}
 
 	async function setDateTime(forecastTime, nowDateString) {
-		const response =  await fetch('/svelte-api/latest_date?data=geos', {
+		const response =  await fetch('/apis/latest_date?data=geos5km', {
 				method: 'GET',
 			});
 		let res = await response.json();

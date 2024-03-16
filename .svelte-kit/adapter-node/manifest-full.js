@@ -25,25 +25,25 @@ return {
 				endpoint: null
 			},
 			{
-				id: "/svelte-api/get_chart_data",
-				pattern: /^\/svelte-api\/get_chart_data\/?$/,
+				id: "/apis/get_chart_data",
+				pattern: /^\/apis\/get_chart_data\/?$/,
 				params: [],
 				page: null,
-				endpoint: __memo(() => import('./entries/endpoints/svelte-api/get_chart_data/_server.js'))
+				endpoint: __memo(() => import('./entries/endpoints/apis/get_chart_data/_server.js'))
 			},
 			{
-				id: "/svelte-api/get_station",
-				pattern: /^\/svelte-api\/get_station\/?$/,
+				id: "/apis/get_station",
+				pattern: /^\/apis\/get_station\/?$/,
 				params: [],
 				page: null,
-				endpoint: __memo(() => import('./entries/endpoints/svelte-api/get_station/_server.js'))
+				endpoint: __memo(() => import('./entries/endpoints/apis/get_station/_server.js'))
 			},
 			{
-				id: "/svelte-api/latest_date",
-				pattern: /^\/svelte-api\/latest_date\/?$/,
+				id: "/apis/latest_date",
+				pattern: /^\/apis\/latest_date\/?$/,
 				params: [],
 				page: null,
-				endpoint: __memo(() => import('./entries/endpoints/svelte-api/latest_date/_server.js'))
+				endpoint: __memo(() => import('./entries/endpoints/apis/latest_date/_server.js'))
 			}
 		],
 		matchers: async () => {

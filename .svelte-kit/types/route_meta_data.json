@@ -5,13 +5,13 @@
 		"src/routes/+layout.js",
 		"src/routes/+layout.js"
 	],
-	"/svelte-api/get_chart_data": [
-		"src/routes/svelte-api/get_chart_data/+server.js"
+	"/apis/get_chart_data": [
+		"src/routes/apis/get_chart_data/+server.js"
 	],
-	"/svelte-api/get_station": [
-		"src/routes/svelte-api/get_station/+server.js"
+	"/apis/get_station": [
+		"src/routes/apis/get_station/+server.js"
 	],
-	"/svelte-api/latest_date": [
-		"src/routes/svelte-api/latest_date/+server.js"
+	"/apis/latest_date": [
+		"src/routes/apis/latest_date/+server.js"
 	]
 }

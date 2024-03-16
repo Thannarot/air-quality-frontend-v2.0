@@ -4,7 +4,7 @@ type Expand<T> = T extends infer O ? { [K in keyof O]: O[K] } : never;
 // @ts-ignore
 type MatcherParam<M> = M extends (param : string) => param is infer U ? U extends string ? U : string : string;
 type RouteParams = {  };
-type RouteId = '/svelte-api/get_chart_data';
+type RouteId = '/apis/latest_date';
 
 export type RequestHandler = Kit.RequestHandler<RouteParams, RouteId>;
 export type RequestEvent = Kit.RequestEvent<RouteParams, RouteId>;

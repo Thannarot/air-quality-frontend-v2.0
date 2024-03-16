@@ -27,7 +27,7 @@
 	async function getTimeSeriesData(drawCoords, drawType) {
 
 		const initDate = $intializationDate.replace('-', '').replace('-', '');
-		const response =  await fetch('/svelte-api/get_chart_data?'+ new URLSearchParams({
+		const response =  await fetch('/apis/get_chart_data?'+ new URLSearchParams({
 				action: 'get-chartData',
 				freq_chart: '3dayrecent',
 				geom_data: drawCoords,

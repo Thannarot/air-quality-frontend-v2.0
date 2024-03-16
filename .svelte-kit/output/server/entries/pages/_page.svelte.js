@@ -2393,7 +2393,7 @@ const BottomDrawer = create_ssr_component(($$result, $$props, $$bindings, slots)
   async function getTimeSeriesData(drawCoords2, drawType2) {
     const initDate = $intializationDate.replace("-", "").replace("-", "");
     const response = await fetch(
-      "/svelte-api/get_chart_data?" + new URLSearchParams({
+      "/apis/get_chart_data?" + new URLSearchParams({
         action: "get-chartData",
         freq_chart: "3dayrecent",
         geom_data: drawCoords2,
@@ -2631,7 +2631,7 @@ const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   async function getChartData(drawCoords2, drawType2) {
     const initDate = $intializationDate;
     const response = await fetch(
-      "/svelte-api/get_chart_data?" + new URLSearchParams({
+      "/apis/get_chart_data?" + new URLSearchParams({
         action: "get-chartData",
         freq_chart: "3dayrecent",
         geom_data: drawCoords2,
@@ -2675,7 +2675,7 @@ const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
     console.log(res.data);
   }
   async function getStations() {
-    const response = await fetch("/svelte-api/get_station?data=2024-01-09+11:00:00", { method: "GET" });
+    const response = await fetch("/apis/get_station?data=2024-01-09+11:00:00", { method: "GET" });
     let res = await response.json();
     let geojsons = createFeatureCollection(res.response);
     createMarker(map, mapboxgl, geojsons);

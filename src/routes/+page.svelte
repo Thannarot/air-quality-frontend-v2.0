@@ -109,7 +109,7 @@
 
 	async function getChartData(drawCoords, drawType) {
 		const initDate = $intializationDate;
-		const response =  await fetch('/svelte-api/get_chart_data?'+ new URLSearchParams({
+		const response =  await fetch('/apis/get_chart_data?'+ new URLSearchParams({
 				action: 'get-chartData',
 				freq_chart: '3dayrecent',
 				geom_data: drawCoords,
@@ -176,7 +176,7 @@
 
 	async function getStations() {
 		// Getting PCD stations data
-		const response =  await fetch('/svelte-api/get_station?data=2024-01-09+11:00:00', {
+		const response =  await fetch('/apis/get_station?data=2024-01-09+11:00:00', {
 				method: 'GET',
 			});
 		let res = await response.json();

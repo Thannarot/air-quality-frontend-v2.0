@@ -89,27 +89,27 @@
       "_app/immutable/assets/_page.Kij4pw44.css"
     ]
   },
-  "src/routes/svelte-api/get_chart_data/+server.js": {
-    "file": "entries/endpoints/svelte-api/get_chart_data/_server.js",
-    "src": "src/routes/svelte-api/get_chart_data/+server.js",
+  "src/routes/apis/get_chart_data/+server.js": {
+    "file": "entries/endpoints/apis/get_chart_data/_server.js",
+    "src": "src/routes/apis/get_chart_data/+server.js",
     "isEntry": true,
     "imports": [
       "_private.js",
       "_public.js"
     ]
   },
-  "src/routes/svelte-api/get_station/+server.js": {
-    "file": "entries/endpoints/svelte-api/get_station/_server.js",
-    "src": "src/routes/svelte-api/get_station/+server.js",
+  "src/routes/apis/get_station/+server.js": {
+    "file": "entries/endpoints/apis/get_station/_server.js",
+    "src": "src/routes/apis/get_station/+server.js",
     "isEntry": true,
     "imports": [
       "_private.js",
       "_public.js"
     ]
   },
-  "src/routes/svelte-api/latest_date/+server.js": {
-    "file": "entries/endpoints/svelte-api/latest_date/_server.js",
-    "src": "src/routes/svelte-api/latest_date/+server.js",
+  "src/routes/apis/latest_date/+server.js": {
+    "file": "entries/endpoints/apis/latest_date/_server.js",
+    "src": "src/routes/apis/latest_date/+server.js",
     "isEntry": true,
     "imports": [
       "_private.js",

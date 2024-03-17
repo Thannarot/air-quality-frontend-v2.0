@@ -1,12 +1,10 @@
 <script>
 
     import { CloseButton } from 'flowbite-svelte';
-    import { ShowPollutantSelect, selectedPollutant, selectedPollutantName } from '../stores/app';
+    import { ShowPollutantSelect, selectedPollutant } from '../stores/app';
     let options = [
 		{ value: 'pm25', name: 'PM2.5' },
-    // { value: 'pm10', name: 'PM10' },
 		{ value: 'no2', name: 'Nitrogen dioxide (NO2)' }
-
 	];
 
   // set select input with nice select style

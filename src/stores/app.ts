@@ -4,7 +4,6 @@ export const pcdshow = writable<boolean>(false);
 export const selectedProduct = writable('');
 export const selectedPollutant = writable('');
 export const selectedProductLayer = writable('');
-export const selectedPollutantName = writable('');
 
 export const selectedStation = writable('');
 export const selectedFire = writable('');

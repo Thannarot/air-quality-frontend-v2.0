@@ -5,9 +5,8 @@
   import { selectedDate_str, selectedTime_str } from '../stores/dateTimeStore';
 
   import * as Icon from 'svelte-flag-icons';
-
-    let activateClickOutside = false;
-    let backdrop = false;
+  let activateClickOutside = false;
+  let backdrop = false;
 
   let hidden6 = true;
   let transitionParamsRight = {
@@ -22,10 +21,7 @@
     $locy = y;
     $locname = loc;
   }
-
-  
 </script>
-
 
 <Drawer {activateClickOutside} {backdrop} rightOffset="top-14 h-screen end-0" placement="right" transitionType="fly" transitionParams={transitionParamsRight} bind:hidden={$hiddenDrawerRanking} id="sidebar6">
   <div class="flex items-center">

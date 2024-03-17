@@ -360,9 +360,9 @@ export function resetWind() {
       }
 
 	  	// map.getSource('wms-source').setTiles([$PollutantTileUrl]);
-		map.getSource('wms-source').tiles = [ $PollutantTileUrl ]
-		map.style._sourceCaches['other:wms-source'].clearTiles();
-		map.style._sourceCaches['other:wms-source'].update(map.transform)
+      map.getSource('wms-source').tiles = [ $PollutantTileUrl ]
+      map.style._sourceCaches['other:wms-source'].clearTiles();
+      map.style._sourceCaches['other:wms-source'].update(map.transform)
 
 
       let layers = map.getStyle().layers;
@@ -374,9 +374,7 @@ export function resetWind() {
         // set map layer order by showing fire layer on top of pollutant map layer
         map.moveLayer("wms-layer", "fire-wms-layer");
       }
-	  
-	  
-      
+
     }, 50);
   }
 
@@ -534,7 +532,7 @@ export function resetWind() {
       if (layerIds.includes("fire-wms-layer")) {
         addFireTileMap($selectedFire);
       }
-    }, 50);
+    }, 200);
   }
 
   $: if (map && $ShowFire == false && map.getLayer("fire-wms-layer")) {
@@ -565,7 +563,6 @@ export function resetWind() {
   }
 
   $: if (map && $ShowPollutant == true && map.getLayer("wms-layer")) {
-    console.log("ShowPollutant ture", $selectedPollutant, $selectedProduct);
     map.setPaintProperty("wms-layer", "raster-opacity", 0.7);
   }
 

@@ -39,13 +39,12 @@
     </div>
 
     <div class="nav-container">
-        <p class="title-page">MEKONG AIR QUALITY EXPLORER</p>
+        <p class="title-page">AIR QUALITY EXPLORER</p>
         <div class="row no-gutters align-items-center justify-content-between h-100">
             <div class="col-auto">
                 <div id="nav__main">
                     <ul class="list">
                         <li><a href="https://servir.adpc.net/tools/mekong-air-quality-explorer">Home</a></li>
-                        <!-- <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSfdiwCI3WH7mknt2XSd9PVcjJiMzNW9dXKBcen3znIpn-y5XA/viewform?pli=1">Feedback</a></li> -->
 
                     </ul>
                 </div>

@@ -1744,9 +1744,9 @@ const TimeSlider = create_ssr_component(($$result, $$props, $$bindings, slots) =
   let values = [10];
   let pipstep = 1;
   let hourOptions = [];
-  let today = moment();
-  let tomorrow = moment(today).add(1, "days");
-  console.log(tomorrow);
+  const now2 = /* @__PURE__ */ new Date();
+  const now_utc = new Date(now2.toUTCString().slice(0, -4));
+  console.log(now_utc.toString());
   const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const months = [
     "Jan",

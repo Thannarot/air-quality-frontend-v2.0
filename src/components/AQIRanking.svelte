@@ -31,12 +31,12 @@
   <div class="flex items-center">
     <h5 id="drawer-label" class="inline-flex items-center mb-4 text-base font-semibold text-gray-800 dark:text-gray-400">
       <!-- <InfoCircleSolid class="w-4 h-4 me-2.5" /> -->
-      Mekong PM2.5 Ranking
+      PM2.5 Ranking
     </h5>
     <CloseButton on:click={() => ($hiddenDrawerRanking = true)} class="mb-4 dark:text-white" />
   </div>
   <p class="text-sm text-gray-500 dark:text-gray-400 float-right">
-    {$selectedTime_str}:00:00
+    {$selectedTime_str}:30:00 UTC
   </p>
   <p class="text-sm text-gray-500 dark:text-gray-400 mb-2">
     {$selectedDate_str} 

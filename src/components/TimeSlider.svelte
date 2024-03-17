@@ -15,10 +15,9 @@
 	let pipstep = 1;
 	let hourOptions = [];
 
-	let today = moment();
-	let tomorrow = moment(today).add(1, 'days');
-	console.log(tomorrow)
-
+	let now = new Date();
+	let now_utc = new Date(now.toUTCString().slice(0, -4));
+	console.log(now_utc.toString()); // ignore the timezone
 
 	const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 	const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -33,16 +32,16 @@
 		return [year, month, day].join('-');
 	}
 
-	let nowDateString = DatetoStringFormat(new Date())
+	let nowDateString = DatetoStringFormat(now_utc)
 
-	$: if (picker_date) {
-		let picker_year = picker_date.getFullYear();
-		let picker_month = picker_date.getMonth();
-		let picker_getdate = picker_date.getDate();
-		let picker_day = picker_date.getDay();
+	$: if (now_utc) {
+		let picker_year = now_utc.getFullYear();
+		let picker_month = now_utc.getMonth();
+		let picker_getdate = now_utc.getDate();
+		let picker_day = now_utc.getDay();
 
 		$selectedDate_str = days[picker_day] + ' ' + months[picker_month] + ' ' + picker_getdate + ' ' + picker_year
-		forecastedDate.set(DatetoStringFormat(picker_date));
+		forecastedDate.set(DatetoStringFormat(now_utc));
 	}
 
     function timesList(start, end, minutes_step){
@@ -104,7 +103,7 @@
 
 
 	onMount(async () => {
-		let now_hour = date.getHours();
+		let now_hour = now_utc.getHours();
 		let closestHourOption = hourOptions.reduce(function(prev, curr) {
 			return (Math.abs(curr - now_hour) < Math.abs(prev - now_hour) ? curr : prev);
 		});
@@ -124,13 +123,13 @@
 		<div class="flex p-2 border-end border-start">
 			<div class="text-center">
 				<p class="font-bold text-purple-900 mb-0">{$selectedDate_str}</p>
-				<p class="mb-0">{$selectedTime_str}:00:00 </p>
+				<p class="mb-0">{$selectedTime_str}:30:00 UTC</p>
 			</div>
 		</div>
 	
 		<div class="flex p-2 border-end">
 			<div class="">
-				<DateInput bind:value={picker_date} dynamicPositioning=true closeOnSelection format="yyyy-MM-dd" placeholder=""/>
+				<DateInput bind:value={now_utc} dynamicPositioning=true closeOnSelection format="yyyy-MM-dd" placeholder=""/>
 			</div>
 		</div>
 	

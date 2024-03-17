@@ -21,7 +21,7 @@
 	// import store variables
 	import { forecastedTime, forecastedDate, intializationDate } from '../stores/dateTimeStore';
 	import { showChartModal } from '../stores/chartStore';
-	import { pcdshow, drawCoords, drawType, ShowStation, ShowFire, ShowPollutant, selectedFire, ShowMapSetting, ShowStatistic, hiddenDrawer, ShowPollutantSelect, hiddenBottomDrawer, locx, locy, locname } from '../stores/app';
+	import { pcdshow, drawCoords, drawType, ShowStation, ShowFire, ShowPollutant, selectedFire, ShowMapSetting, ShowStatistic, hiddenDrawerRanking, ShowPollutantSelect, hiddenBottomDrawer, locx, locy, locname } from '../stores/app';
 	
 	// helpers
 	import { createMarker, createFeatureCollection } from '../helpers/MapFunctions.js';
@@ -39,7 +39,7 @@
 
 	$ShowPollutant = true;
 	$ShowMapSetting = false;
-	$hiddenDrawer = false;
+	$hiddenDrawerRanking = false;
 	$ShowPollutantSelect = false;
 	$hiddenBottomDrawer = true; 
 	$selectedFire = 'fires_viirs_24';
@@ -152,8 +152,6 @@
 				}
 			});
 
-			console.log(barColors);
-
 			let pm25val = pm25Data.map((tuple) => tuple[1]);
 			removeData(chart);
 			addData(chart, lables, pm25val, barColors);
@@ -172,15 +170,22 @@
 				showModal = true;
 			});
 		}
+	}
 
-		console.log(res.data);
+	function mapZoomIn() {
+		let currentZoom = map.getZoom();
+		map.setZoom(currentZoom+1);
+	}
+	function mapZoomOut() {
+		let currentZoom = map.getZoom();
+		map.setZoom(currentZoom-1);
 	}
 
 	async function getStations() {
 		// Getting PCD stations data
 		let params = {
 			action: 'get-stations',
-			obs_date: '2024-01-09 11:00:00'
+			obs_date: $forecastedDate + ' '+ $forecastedTime + ':00:00'
 		};
 
     	let res = await axios.get(PUBLIC_BASE_API_URL, { 
@@ -206,24 +211,18 @@
 		getChartData($drawCoords, $drawType)
 	}
 
-	function mapZoomIn() {
-		let currentZoom = map.getZoom();
-		map.setZoom(currentZoom+1);
-	}
-	function mapZoomOut() {
-		let currentZoom = map.getZoom();
-		map.setZoom(currentZoom-1);
-	}
 
-	$: if (!$hiddenDrawer) {
-		document.querySelectorAll('#right-component').forEach(
+	$: if (!$hiddenDrawerRanking) {
+		setTimeout(()=> {
+			document.querySelectorAll('#right-component').forEach(
        		el => el.style.right = '330px'
   		 );
 		   document.querySelectorAll('#timeslider').forEach(
        		el => el.style.justifyContent = 'center'
   		 );
+		}, 50)
 	}
-	$: if ($hiddenDrawer) {
+	$: if ($hiddenDrawerRanking) {
 		document.querySelectorAll('#right-component').forEach(
        		el => el.style.right = '30px',
 		);
@@ -263,55 +262,10 @@
 		{/if}
     </div>
 
-    <!-- <div class="box__info-analysis">
-        <a class="btn-analysis d-flex align-items-center justify-content-center"><img src="assets/img/icon/icon-analysis.svg" alt=""></a>
-        <div class="info rounded">
-            <a class="btn-close border-0 d-flex align-items-center justify-content-center"><img class="d-block" src="assets/img/icon/close.svg" alt=""></a>
-
-            <div class="head border-bottom border-green d-flex align-items-center mb-15 pb-1 w-100">
-                <p class="icon me-1 mb-0"><img style="height: 21px;" src="assets/img/icon/icon-analysis.svg" alt=""></p>
-                <p class="text blue-600 text-2xl font-bold mb-0">ข้อมูลวิเคราะห์</p>
-            </div>
-
-            <div class="border-bottom border-white mb-15 pb-1">
-                <div class="mb-1">
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" id="flexRadioDefault1" name="flexRadioDefault" checked>
-                        <label class="form-check-label" for="flexRadioDefault1">วิเคราะห์แบบที่ 1</label>
-                    </div>
-                </div>
-                <div class="mb-1">
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" id="flexRadioDefault2" name="flexRadioDefault">
-                        <label class="form-check-label" for="flexRadioDefault2">วิเคราะห์แบบที่ 2</label>
-                    </div>
-                </div>
-                <div class="mb-1">
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" id="flexRadioDefault3" name="flexRadioDefault">
-                        <label class="form-check-label" for="flexRadioDefault3">วิเคราะห์แบบที่ 3</label>
-                    </div>
-                </div>
-                <div class="mb-1">
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" id="flexRadioDefault4" name="flexRadioDefault">
-                        <label class="form-check-label" for="flexRadioDefault4">วิเคราะห์แบบที่ 4</label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="box__btn d-flex justify-content-center">
-                <a href="#" class="btn border-0 d-flex align-items-center justify-content-center px-5 rounded-pill"><span class="d-block white font-light text">ตกลง</span></a>
-            </div>
-        </div>
-    </div> -->
-
     <div class="box__zoom-map">
         <a on:click={mapZoomIn} class="btn-plus d-flex align-items-center justify-content-center mb-1"><img src="assets/img/icon/icon-plus.svg" alt=""></a>
         <a on:click={mapZoomOut} class="btn-minus d-flex align-items-center justify-content-center"><img src="assets/img/icon/icon-minus.svg" alt=""></a>
     </div>
-
-    
 
     <div class="map overflow-hidden">
 		<MapExample bind:map></MapExample>
@@ -321,13 +275,9 @@
 		<TimeSlider></TimeSlider>
 	</div>
 
-	<AqiRanking bind:hiddenDrawer={$hiddenDrawer}></AqiRanking>
+	<AqiRanking></AqiRanking>
 
-	<BottomDrawer bind:hiddenDrawer={$hiddenBottomDrawer}>
-		<h2 class="font-meduim text-lg text-slate-700 mb-0">
-			Air quality monitoring
-		</h2>
-	</BottomDrawer>
+	<BottomDrawer></BottomDrawer>
 	
 	
 	<Modal bind:showModal>

@@ -4,6 +4,7 @@ export const pcdshow = writable<boolean>(false);
 export const selectedProduct = writable('');
 export const selectedPollutant = writable('');
 export const selectedProductLayer = writable('');
+export const selectedPollutantName = writable('');
 
 export const selectedStation = writable('');
 export const selectedFire = writable('');
@@ -19,7 +20,7 @@ export const drawCoords = writable('');
 export const drawType = writable('');
 
 export const ShowStatistic =  writable('');
-export const hiddenDrawer = writable<boolean>(false);
+export const hiddenDrawerRanking = writable<boolean>(false);
 export const hiddenBottomDrawer = writable<boolean>(false);
 
 export const locx = writable('');

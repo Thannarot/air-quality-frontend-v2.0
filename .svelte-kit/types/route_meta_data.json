@@ -1,17 +1,5 @@
 {
 	"/": [
-		"src/routes/+page.js",
-		"src/routes/+page.server.js",
-		"src/routes/+layout.js",
-		"src/routes/+layout.js"
-	],
-	"/apis/get_chart_data": [
-		"src/routes/apis/get_chart_data/+server.js"
-	],
-	"/apis/get_station": [
-		"src/routes/apis/get_station/+server.js"
-	],
-	"/apis/latest_date": [
-		"src/routes/apis/latest_date/+server.js"
+		"src/routes/+page.js"
 	]
 }

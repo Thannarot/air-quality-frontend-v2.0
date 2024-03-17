@@ -1,6 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
-	import { selectedProduct, selectedPollutant, ShowPollutant, selectOptions, selectedProductLayer } from '../stores/app';
+	import { selectedProduct, selectedPollutant, ShowPollutant, selectOptions, selectedProductLayer, selectedPollutantName} from '../stores/app';
 	import { getLegend } from '../helpers/app';
 
 	// set selected product, pm2.5 geos is a default
@@ -29,7 +29,6 @@
 	$: if ($selectedPollutant === 'no2') {
 		satellite_options = [
 			{ value: 'gems', name: 'GEMS' },
-			{ value: 'sentinel5p', name: 'Sentinel 5P' },
 		];
 		$selectOptions = satellite_options;
 		$selectedProduct = 'gems';

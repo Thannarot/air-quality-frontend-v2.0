@@ -1,6 +1,6 @@
 <script type="ts">
 
-	import { ShowPollutant, ShowStation, ShowFire, ShowMapSetting, ShowStatistic, hiddenDrawer, ShowPollutantSelect, ShowWindCanvas } from '../stores/app';
+	import { ShowPollutant, ShowStation, ShowFire, ShowMapSetting, ShowStatistic, hiddenDrawerRanking, ShowPollutantSelect, ShowWindCanvas } from '../stores/app';
   
   function showMapSettingPanel() {
     $ShowMapSetting= !$ShowMapSetting;
@@ -25,8 +25,6 @@
   }
 
   
-
-
 </script>
 
 <div class="detail">
@@ -48,7 +46,7 @@
           <p class="text d-block text-sm text-center mb-0"><span class="d-block">Fire</span> Product</p>
       </a>
   </div>
-  <div class="statistics-map" on:click={()=> $hiddenDrawer = !$hiddenDrawer } on:keydown={()=> $hiddenDrawer=!$hiddenDrawer }>
+  <div class="statistics-map" on:click={()=> $hiddenDrawerRanking = !$hiddenDrawerRanking } >
       <a class="btn-tool d-block">
           <p class="icon d-flex align-items-center justify-content-center rounded-circle mx-auto"><img class="d-block" src="assets/img/icon/icon-tool-4.svg" alt=""></p>
           <p class="text d-block text-sm text-center mb-0"><span class="d-block">Statistics</span> Report</p>

@@ -1,5 +1,6 @@
 <script type="ts">
   import { onMount, setContext } from "svelte";
+  import 'mapbox-gl/dist/mapbox-gl.css';
   import {
     PUBLIC_BASE_WIND_URL,
     PUBLIC_BASE_WMS_URL,
@@ -30,8 +31,6 @@
   import {
     clearLayer,
     clearSource,
-    resetWind,
-    getEventObject,
   } from "../../helpers/MapFunctions.js";
 
   export let map;
@@ -59,6 +58,75 @@
     lng = map.getCenter().lng;
     lat = map.getCenter().lat;
   }
+
+
+export function getEventObject() {
+    const canvas = map.getCanvas();
+    const dimensions = map.getBounds();
+
+    const result = {
+        width: canvas.width,
+        height: canvas.height,
+        north: dimensions.getNorth(),
+        south: dimensions.getSouth(),
+        west: dimensions.getWest(),
+        east: dimensions.getEast(),
+        zoomLevel: map.getZoom()
+    };
+    return result;
+}
+
+export function resetWind() {
+    const obj = getEventObject(map);
+    const { zoomLevel, north, south, west, east, width, height } = obj;
+    mapcanvas.style.display = 'none';
+
+    if (windy) {
+        windy.stop();
+    }
+
+    if (timeout) {
+        clearTimeout(timeout);
+    }
+
+    timeout = setTimeout(function () {
+        let particleWidth = 3;
+        if (zoomLevel > 2) {
+            particleWidth = 4;
+        }
+        if (zoomLevel > 3) {
+            particleWidth = 4.5;
+        }
+        if (zoomLevel > 4) {
+            particleWidth = 4.7;
+        }
+        if (zoomLevel > 5) {
+            particleWidth = 4.8;
+        }
+        if (zoomLevel > 6) {
+            particleWidth = 5;
+        }
+        mapcanvas.style.display = 'initial';
+        mapcanvas.width = width;
+        mapcanvas.height = height;
+        windy.start(
+            [
+                [0, 0],
+                [width, height]
+            ],
+            width,
+            height,
+            [
+                [west, south],
+                [east, north]
+            ],
+            { particleLineWidth: particleWidth, zoomLevel: zoomLevel}
+        );
+    }, 200);
+}
+
+
+
 
   function addFireTileMap(layername) {
     currentFire = layername;
@@ -147,7 +215,7 @@
 					&request=GetMap
 					&layers=${$selectedProductLayer}
 					&styles=default-scalar%2Fpm25
-					&format=image/png
+					&format=image/png;mode=32bit
 					&transparent=true
 					&version=1.3.0
 					&time=${$forecastedDate}T${$forecastedTime.replace("h", "")}:30:00Z
@@ -167,7 +235,7 @@
 				&request=GetMap
 				&layers=${$selectedProductLayer}
 				&styles=default-scalar%2Fno2
-				&format=image%2Fpng
+				&format=image/png;mode=32bit
 				&transparent=true
 				&version=1.3.0
 				&colorscalerange=0%2C5
@@ -259,7 +327,7 @@
 					&request=GetMap
 					&layers=${$selectedProductLayer}
 					&styles=default-scalar%2Fpm25
-					&format=image/png
+					&format=image/png;mode=32bit
 					&transparent=true
 					&version=1.3.0
 					&time=${$forecastedDate}T${$forecastedTime.replace("h", "")}:30:00Z
@@ -279,7 +347,7 @@
 				&request=GetMap
 				&layers=${$selectedProductLayer}
 				&styles=default-scalar%2Fno2
-				&format=image%2Fpng
+				&format=image/png;mode=32bit
 				&transparent=true
 				&version=1.3.0
 				&colorscalerange=0%2C5
@@ -410,21 +478,20 @@
 
     map.on("move", () => {
       updateData();
-      resetWind(map, windy, timeout);
+      resetWind();
     });
 
     map.on("resize", (e) => {
-      resetWind(map, windy, timeout);
+      resetWind();
     });
 
     // get wind map
     fetch(PUBLIC_BASE_WIND_URL)
       .then((d) => d.json())
       .then((data) => {
-        console.log(data);
         // Remember - dom elements with ID, are exposed globally, so mapcanvas element exists already
         windy = new Windy({ canvas: mapcanvas, data: data });
-        resetWind(map, windy, timeout);
+        resetWind();
       });
   });
 
@@ -456,10 +523,12 @@
   $: if ($baseMapStyle !== "") {
     let layers = map.getStyle().layers;
     let layerIds = layers.map((l) => l.id);
+
     map.setStyle("mapbox://styles/servirmekong/" + $baseMapStyle);
+
     setTimeout(() => {
       if (layerIds.includes("wms-layer")) {
-        updateTiles($selectedPollutant, $selectedProduct);
+        addTileMap($selectedPollutant, $selectedProduct);
       }
       // if there is fire layer showing on the map
       if (layerIds.includes("fire-wms-layer")) {
@@ -482,7 +551,7 @@
   }
 
   $: if (map && $ShowFire == true && map.getLayer("fire-wms-layer")) {
-    map.setPaintProperty("fire-wms-layer", "raster-opacity", 0.9);
+    map.setPaintProperty("fire-wms-layer", "raster-opacity", 1);
   }
 
   $: if (map && $ShowStation == false) {

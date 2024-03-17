@@ -4,17 +4,14 @@
 	import "../app.css";
 
 
-	function showLanguageOptions() {
+    let visible = false;
 
-		document.querySelectorAll('#lang-btn').forEach(
-              el => 	el.classList.add('active')
+    function toggleVissible() {
+        visible = true;
+        document.querySelectorAll('#lang-options').forEach(
+              el =>  el.style.display = el.style.display === 'none' ? 'block' : 'none'
           );
-
-		  document.querySelectorAll('#lang-options').forEach(
-              el => 	el.style.display = 'block'
-          );
-
-	}
+    }
 
   </script>
  
@@ -54,7 +51,7 @@
                 </div>
             </div>
             <div class="col-auto">
-                <div class="box__language" on:click={showLanguageOptions}>
+                <div class="box__language" on:click={toggleVissible}>
                     <a id="lang-btn" class="btn-toggle d-flex">
                         <p class="text white text-xs font-light rounded-pill mb-0 px-15">LANGUAGE</p>
                         <p class="flag d-flex align-items-center justify-content-center rounded-pill mb-0">
@@ -62,10 +59,12 @@
                             <img style="display: none;" src="assets/img/icon/lang-th.png" alt="">
                         </p>
                     </a>
-                    <div id="lang-options" class="info py-15 px-1">
+                    { #if visible }
+                    <div id="lang-options" class="info py-15 px-1" style="display:block">
 						<a href="#" class="d-block text-xs px-15 rounded-pill w-100 link mb-1 active">ENGLISH <img src="assets/img/icon/lang-en.png" alt=""></a>
                         <a href="#" class="d-block text-xs px-15 rounded-pill w-100 link">THAI <img src="assets/img/icon/lang-th.png" alt=""></a>
                     </div>
+                    {/if}
                 </div>  
             </div>
         </div>

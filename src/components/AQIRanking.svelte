@@ -1,7 +1,7 @@
 <script>
   import { Drawer, CloseButton } from 'flowbite-svelte';
   import { sineIn } from 'svelte/easing';
-  import { hiddenDrawer, hiddenBottomDrawer, locx, locy, locname } from '../stores/app';
+  import { hiddenDrawerRanking, hiddenBottomDrawer, locx, locy, locname } from '../stores/app';
   import { selectedDate_str, selectedTime_str } from '../stores/dateTimeStore';
 
   import * as Icon from 'svelte-flag-icons';
@@ -27,13 +27,13 @@
 </script>
 
 
-<Drawer {activateClickOutside} {backdrop} rightOffset="top-14 h-screen end-0" placement="right" transitionType="fly" transitionParams={transitionParamsRight} bind:hidden={$hiddenDrawer} id="sidebar6">
+<Drawer {activateClickOutside} {backdrop} rightOffset="top-14 h-screen end-0" placement="right" transitionType="fly" transitionParams={transitionParamsRight} bind:hidden={$hiddenDrawerRanking} id="sidebar6">
   <div class="flex items-center">
     <h5 id="drawer-label" class="inline-flex items-center mb-4 text-base font-semibold text-gray-800 dark:text-gray-400">
       <!-- <InfoCircleSolid class="w-4 h-4 me-2.5" /> -->
       Mekong PM2.5 Ranking
     </h5>
-    <CloseButton on:click={() => ($hiddenDrawer = true)} class="mb-4 dark:text-white" />
+    <CloseButton on:click={() => ($hiddenDrawerRanking = true)} class="mb-4 dark:text-white" />
   </div>
   <p class="text-sm text-gray-500 dark:text-gray-400 float-right">
     {$selectedTime_str}:00:00

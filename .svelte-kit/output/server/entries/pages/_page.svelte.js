@@ -1,7 +1,7 @@
-import { n as noop, c as create_ssr_component, a as subscribe, b as setContext, d as add_attribute, f as set_store_value, e as escape, h as each, i as createEventDispatcher, v as validate_component, j as add_styles, k as compute_rest_props, g as getContext, l as spread, o as escape_object, p as escape_attribute_value, q as onDestroy } from "../../chunks/ssr.js";
+import { n as noop, c as create_ssr_component, a as subscribe, s as setContext, b as add_attribute, d as set_store_value, e as escape, f as each, h as createEventDispatcher, v as validate_component, i as add_styles, j as compute_rest_props, g as getContext, k as spread, l as escape_object, o as escape_attribute_value, p as onDestroy } from "../../chunks/ssr.js";
 import mapboxgl from "mapbox-gl";
+import axios from "axios";
 import Chart from "chart.js/auto";
-import { a as PUBLIC_MAPBOX_KEY, b as PUBLIC_BASE_WMS_URL, c as PUBLIC_BASE_FRIMS_WMS_URL } from "../../chunks/public.js";
 import { w as writable } from "../../chunks/index.js";
 import { twMerge } from "tailwind-merge";
 import "d3";
@@ -32,6 +32,11 @@ function loop(callback) {
     }
   };
 }
+const PUBLIC_BASE_API_URL = "http://216.218.240.248/api/mapclient";
+const PUBLIC_BASE_WMS_URL = "http://216.218.240.247:8080/thredds/wms/";
+const PUBLIC_BASE_FRIMS_WMS_URL = "https://firms.modaps.eosdis.nasa.gov/mapserver/wms/fires/37601af187a7c4054759a42043b19adc/";
+const PUBLIC_MAPBOX_KEY = "pk.eyJ1Ijoic2VydmlybWVrb25nIiwiYSI6ImNrYWMzenhldDFvNG4yeXBtam1xMTVseGoifQ.Wr-FBcvcircZ0qyItQTq9g";
+const PUBLIC_BACKEND_AUTHENTICATION = "admin.KRg06uWinwXAL5SRRCBSmH2HON4tZKdpCItHpbZh7HghJFFH6mIizlNM01";
 const contextKey = {};
 const forecastedDate = writable("");
 const forecastedTime = writable("");
@@ -53,7 +58,7 @@ const ShowMapSetting = writable(false);
 const ShowPollutantSelect = writable(false);
 const drawCoords = writable("");
 const drawType = writable("");
-const hiddenDrawer = writable(false);
+const hiddenDrawerRanking = writable(false);
 const hiddenBottomDrawer = writable(false);
 const locx = writable("");
 const locy = writable("");
@@ -203,12 +208,64 @@ const MapBox = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   $$unsubscribe_PollutantTileUrl = subscribe(PollutantTileUrl, (value) => $PollutantTileUrl = value);
   let { map } = $$props;
   let mapContainer;
+  let windy;
+  let timeout;
   let currentFire = "";
   setContext(contextKey, {
     getMap: () => map,
     getMapBoxDraw: () => Draw
   });
   mapboxgl.accessToken = PUBLIC_MAPBOX_KEY;
+  function getEventObject() {
+    const canvas = map.getCanvas();
+    const dimensions = map.getBounds();
+    const result = {
+      width: canvas.width,
+      height: canvas.height,
+      north: dimensions.getNorth(),
+      south: dimensions.getSouth(),
+      west: dimensions.getWest(),
+      east: dimensions.getEast(),
+      zoomLevel: map.getZoom()
+    };
+    return result;
+  }
+  function resetWind() {
+    const obj = getEventObject();
+    const { zoomLevel, north, south, west, east, width, height } = obj;
+    mapcanvas.style.display = "none";
+    if (timeout) {
+      clearTimeout(timeout);
+    }
+    timeout = setTimeout(
+      function() {
+        let particleWidth = 3;
+        if (zoomLevel > 2) {
+          particleWidth = 4;
+        }
+        if (zoomLevel > 3) {
+          particleWidth = 4.5;
+        }
+        if (zoomLevel > 4) {
+          particleWidth = 4.7;
+        }
+        if (zoomLevel > 5) {
+          particleWidth = 4.8;
+        }
+        if (zoomLevel > 6) {
+          particleWidth = 5;
+        }
+        mapcanvas.style.display = "initial";
+        mapcanvas.width = width;
+        mapcanvas.height = height;
+        windy.start([[0, 0], [width, height]], width, height, [[west, south], [east, north]], {
+          particleLineWidth: particleWidth,
+          zoomLevel
+        });
+      },
+      200
+    );
+  }
   function addFireTileMap(layername) {
     currentFire = layername;
     setTimeout(
@@ -273,7 +330,7 @@ const MapBox = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 					&request=GetMap
 					&layers=${$selectedProductLayer}
 					&styles=default-scalar%2Fpm25
-					&format=image/png
+					&format=image/png;mode=32bit
 					&transparent=true
 					&version=1.3.0
 					&time=${$forecastedDate}T${$forecastedTime.replace("h", "")}:30:00Z
@@ -296,7 +353,7 @@ const MapBox = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 				&request=GetMap
 				&layers=${$selectedProductLayer}
 				&styles=default-scalar%2Fno2
-				&format=image%2Fpng
+				&format=image/png;mode=32bit
 				&transparent=true
 				&version=1.3.0
 				&colorscalerange=0%2C5
@@ -368,7 +425,7 @@ const MapBox = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 					&request=GetMap
 					&layers=${$selectedProductLayer}
 					&styles=default-scalar%2Fpm25
-					&format=image/png
+					&format=image/png;mode=32bit
 					&transparent=true
 					&version=1.3.0
 					&time=${$forecastedDate}T${$forecastedTime.replace("h", "")}:30:00Z
@@ -391,7 +448,7 @@ const MapBox = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 				&request=GetMap
 				&layers=${$selectedProductLayer}
 				&styles=default-scalar%2Fno2
-				&format=image%2Fpng
+				&format=image/png;mode=32bit
 				&transparent=true
 				&version=1.3.0
 				&colorscalerange=0%2C5
@@ -422,6 +479,10 @@ const MapBox = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   }
   if ($$props.map === void 0 && $$bindings.map && map !== void 0)
     $$bindings.map(map);
+  if ($$props.getEventObject === void 0 && $$bindings.getEventObject && getEventObject !== void 0)
+    $$bindings.getEventObject(getEventObject);
+  if ($$props.resetWind === void 0 && $$bindings.resetWind && resetWind !== void 0)
+    $$bindings.resetWind(resetWind);
   if ($$props.getMap === void 0 && $$bindings.getMap && getMap !== void 0)
     $$bindings.getMap(getMap);
   {
@@ -442,7 +503,7 @@ const MapBox = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       setTimeout(
         () => {
           if (layerIds.includes("wms-layer")) {
-            updateTiles($selectedPollutant);
+            addTileMap($selectedPollutant);
           }
           if (layerIds.includes("fire-wms-layer")) {
             addFireTileMap($selectedFire);
@@ -470,7 +531,7 @@ const MapBox = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   }
   {
     if (map && $ShowFire == true && map.getLayer("fire-wms-layer")) {
-      map.setPaintProperty("fire-wms-layer", "raster-opacity", 0.9);
+      map.setPaintProperty("fire-wms-layer", "raster-opacity", 1);
     }
   }
   {
@@ -1798,18 +1859,18 @@ const LayerToggle = create_ssr_component(($$result, $$props, $$bindings, slots) 
   let $$unsubscribe_ShowMapSetting;
   let $$unsubscribe_ShowStation;
   let $$unsubscribe_ShowFire;
-  let $$unsubscribe_hiddenDrawer;
+  let $$unsubscribe_hiddenDrawerRanking;
   $$unsubscribe_ShowPollutantSelect = subscribe(ShowPollutantSelect, (value) => value);
   $$unsubscribe_ShowMapSetting = subscribe(ShowMapSetting, (value) => value);
   $$unsubscribe_ShowStation = subscribe(ShowStation, (value) => value);
   $$unsubscribe_ShowFire = subscribe(ShowFire, (value) => value);
-  $$unsubscribe_hiddenDrawer = subscribe(hiddenDrawer, (value) => value);
+  $$unsubscribe_hiddenDrawerRanking = subscribe(hiddenDrawerRanking, (value) => value);
   $$unsubscribe_ShowPollutantSelect();
   $$unsubscribe_ShowMapSetting();
   $$unsubscribe_ShowStation();
   $$unsubscribe_ShowFire();
-  $$unsubscribe_hiddenDrawer();
-  return `<div class="detail"><div class="air-quality" data-svelte-h="svelte-1lqf13n"><a class="btn-tool d-block"><p class="icon d-flex align-items-center justify-content-center rounded-circle mx-auto"><img class="d-block" src="assets/img/icon/icon-tool-1.svg" alt=""></p> <p class="text d-block text-sm text-center mb-0"><span class="d-block">Air</span> Quality</p></a></div> <div class="ground-station" data-svelte-h="svelte-j6j13u"><a class="btn-tool d-block"><p class="icon d-flex align-items-center justify-content-center rounded-circle mx-auto"><img class="d-block" src="assets/img/icon/icon-tool-2.svg" alt=""></p> <p class="text d-block text-sm text-center mb-0"><span class="d-block">Ground</span> Station</p></a></div> <div class="fire-product" data-svelte-h="svelte-1ph61d1"><a class="btn-tool d-block"><p class="icon d-flex align-items-center justify-content-center rounded-circle mx-auto"><img class="d-block" src="assets/img/icon/icon-tool-3.svg" alt=""></p> <p class="text d-block text-sm text-center mb-0"><span class="d-block">Fire</span> Product</p></a></div> <div class="statistics-map" data-svelte-h="svelte-9oc9vu"><a class="btn-tool d-block"><p class="icon d-flex align-items-center justify-content-center rounded-circle mx-auto"><img class="d-block" src="assets/img/icon/icon-tool-4.svg" alt=""></p> <p class="text d-block text-sm text-center mb-0"><span class="d-block">Statistics</span> Report</p></a></div> <div class="base-map" data-svelte-h="svelte-191qql3"><a class="btn-tool d-block"><p class="icon d-flex align-items-center justify-content-center rounded-circle mx-auto"><img class="d-block" src="assets/img/icon/icon-tool-5.svg" alt=""></p> <p class="text d-block text-sm text-center mb-0"><span class="d-block">Base</span> Map</p></a></div> </div>`;
+  $$unsubscribe_hiddenDrawerRanking();
+  return `<div class="detail"><div class="air-quality" data-svelte-h="svelte-1lqf13n"><a class="btn-tool d-block"><p class="icon d-flex align-items-center justify-content-center rounded-circle mx-auto"><img class="d-block" src="assets/img/icon/icon-tool-1.svg" alt=""></p> <p class="text d-block text-sm text-center mb-0"><span class="d-block">Air</span> Quality</p></a></div> <div class="ground-station" data-svelte-h="svelte-j6j13u"><a class="btn-tool d-block"><p class="icon d-flex align-items-center justify-content-center rounded-circle mx-auto"><img class="d-block" src="assets/img/icon/icon-tool-2.svg" alt=""></p> <p class="text d-block text-sm text-center mb-0"><span class="d-block">Ground</span> Station</p></a></div> <div class="fire-product" data-svelte-h="svelte-1ph61d1"><a class="btn-tool d-block"><p class="icon d-flex align-items-center justify-content-center rounded-circle mx-auto"><img class="d-block" src="assets/img/icon/icon-tool-3.svg" alt=""></p> <p class="text d-block text-sm text-center mb-0"><span class="d-block">Fire</span> Product</p></a></div> <div class="statistics-map" data-svelte-h="svelte-a3albv"><a class="btn-tool d-block"><p class="icon d-flex align-items-center justify-content-center rounded-circle mx-auto"><img class="d-block" src="assets/img/icon/icon-tool-4.svg" alt=""></p> <p class="text d-block text-sm text-center mb-0"><span class="d-block">Statistics</span> Report</p></a></div> <div class="base-map" data-svelte-h="svelte-191qql3"><a class="btn-tool d-block"><p class="icon d-flex align-items-center justify-content-center rounded-circle mx-auto"><img class="d-block" src="assets/img/icon/icon-tool-5.svg" alt=""></p> <p class="text d-block text-sm text-center mb-0"><span class="d-block">Base</span> Map</p></a></div> </div>`;
 });
 const css$3 = {
   code: ".item.svelte-1lbf8na{height:auto}",
@@ -1841,10 +1902,7 @@ const AirPollutants = create_ssr_component(($$result, $$props, $$bindings, slots
   $$result.css.add(css$3);
   {
     if ($selectedPollutant === "no2") {
-      satellite_options = [
-        { value: "gems", name: "GEMS" },
-        { value: "sentinel5p", name: "Sentinel 5P" }
-      ];
+      satellite_options = [{ value: "gems", name: "GEMS" }];
       set_store_value(selectOptions, $selectOptions = satellite_options, $selectOptions);
       set_store_value(selectedProduct, $selectedProduct = "gems", $selectedProduct);
     }
@@ -2283,14 +2341,14 @@ const AQIRanking = create_ssr_component(($$result, $$props, $$bindings, slots) =
   let $$unsubscribe_locy;
   let $$unsubscribe_locx;
   let $$unsubscribe_hiddenBottomDrawer;
-  let $hiddenDrawer, $$unsubscribe_hiddenDrawer;
+  let $hiddenDrawerRanking, $$unsubscribe_hiddenDrawerRanking;
   let $selectedTime_str, $$unsubscribe_selectedTime_str;
   let $selectedDate_str, $$unsubscribe_selectedDate_str;
   $$unsubscribe_locname = subscribe(locname, (value) => value);
   $$unsubscribe_locy = subscribe(locy, (value) => value);
   $$unsubscribe_locx = subscribe(locx, (value) => value);
   $$unsubscribe_hiddenBottomDrawer = subscribe(hiddenBottomDrawer, (value) => value);
-  $$unsubscribe_hiddenDrawer = subscribe(hiddenDrawer, (value) => $hiddenDrawer = value);
+  $$unsubscribe_hiddenDrawerRanking = subscribe(hiddenDrawerRanking, (value) => $hiddenDrawerRanking = value);
   $$unsubscribe_selectedTime_str = subscribe(selectedTime_str, (value) => $selectedTime_str = value);
   $$unsubscribe_selectedDate_str = subscribe(selectedDate_str, (value) => $selectedDate_str = value);
   let transitionParamsRight = { x: 320, duration: 200, easing: sineIn };
@@ -2311,11 +2369,11 @@ const AQIRanking = create_ssr_component(($$result, $$props, $$bindings, slots) =
         transitionType: "fly",
         transitionParams: transitionParamsRight,
         id: "sidebar6",
-        hidden: $hiddenDrawer
+        hidden: $hiddenDrawerRanking
       },
       {
         hidden: ($$value) => {
-          $hiddenDrawer = $$value;
+          $hiddenDrawerRanking = $$value;
           $$settled = false;
         }
       },
@@ -2331,7 +2389,7 @@ const AQIRanking = create_ssr_component(($$result, $$props, $$bindings, slots) =
   $$unsubscribe_locy();
   $$unsubscribe_locx();
   $$unsubscribe_hiddenBottomDrawer();
-  $$unsubscribe_hiddenDrawer();
+  $$unsubscribe_hiddenDrawerRanking();
   $$unsubscribe_selectedTime_str();
   $$unsubscribe_selectedDate_str();
   return $$rendered;
@@ -2392,21 +2450,23 @@ const BottomDrawer = create_ssr_component(($$result, $$props, $$bindings, slots)
   let transitionParamsBottom = { y: 320, duration: 200, easing: sineIn };
   async function getTimeSeriesData(drawCoords2, drawType2) {
     const initDate = $intializationDate.replace("-", "").replace("-", "");
-    const response = await fetch(
-      "/apis/get_chart_data?" + new URLSearchParams({
-        action: "get-chartData",
-        freq_chart: "3dayrecent",
-        geom_data: drawCoords2,
-        interaction: drawType2,
-        run_date_chart: initDate + ".nc",
-        run_type_chart: "geos",
-        variable: "BC_MLPM25"
-      }),
-      { method: "GET" }
-    );
-    let res = await response.json();
+    let params = {
+      action: "get-chartData",
+      freq_chart: "3dayrecent",
+      geom_data: drawCoords2,
+      interaction: drawType2,
+      run_date_chart: initDate + ".nc",
+      run_type_chart: "geos",
+      variable: "BC_MLPM25"
+    };
+    let res = await axios.get(PUBLIC_BASE_API_URL, {
+      params,
+      headers: {
+        Authorization: PUBLIC_BACKEND_AUTHENTICATION
+      }
+    });
     if (res) {
-      let fetchData = res.response;
+      let fetchData = res.data.data;
       let pm25Data = fetchData.plot;
       let lables = pm25Data.map((tuple) => new Date(tuple[0]).toLocaleString("en-GB", { hour12: false }));
       pm25Data.map(function(tuple) {
@@ -2541,11 +2601,13 @@ const css = {
   map: null
 };
 const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  let $hiddenDrawer, $$unsubscribe_hiddenDrawer;
+  let $hiddenDrawerRanking, $$unsubscribe_hiddenDrawerRanking;
   let $drawType, $$unsubscribe_drawType;
   let $drawCoords, $$unsubscribe_drawCoords;
   let $showChartModal, $$unsubscribe_showChartModal;
   let $pcdshow, $$unsubscribe_pcdshow;
+  let $forecastedTime, $$unsubscribe_forecastedTime;
+  let $forecastedDate, $$unsubscribe_forecastedDate;
   let $intializationDate, $$unsubscribe_intializationDate;
   let $selectedFire, $$unsubscribe_selectedFire;
   let $hiddenBottomDrawer, $$unsubscribe_hiddenBottomDrawer;
@@ -2554,11 +2616,13 @@ const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let $ShowPollutant, $$unsubscribe_ShowPollutant;
   let $ShowStation, $$unsubscribe_ShowStation;
   let $ShowFire, $$unsubscribe_ShowFire;
-  $$unsubscribe_hiddenDrawer = subscribe(hiddenDrawer, (value) => $hiddenDrawer = value);
+  $$unsubscribe_hiddenDrawerRanking = subscribe(hiddenDrawerRanking, (value) => $hiddenDrawerRanking = value);
   $$unsubscribe_drawType = subscribe(drawType, (value) => $drawType = value);
   $$unsubscribe_drawCoords = subscribe(drawCoords, (value) => $drawCoords = value);
   $$unsubscribe_showChartModal = subscribe(showChartModal, (value) => $showChartModal = value);
   $$unsubscribe_pcdshow = subscribe(pcdshow, (value) => $pcdshow = value);
+  $$unsubscribe_forecastedTime = subscribe(forecastedTime, (value) => $forecastedTime = value);
+  $$unsubscribe_forecastedDate = subscribe(forecastedDate, (value) => $forecastedDate = value);
   $$unsubscribe_intializationDate = subscribe(intializationDate, (value) => $intializationDate = value);
   $$unsubscribe_selectedFire = subscribe(selectedFire, (value) => $selectedFire = value);
   $$unsubscribe_hiddenBottomDrawer = subscribe(hiddenBottomDrawer, (value) => $hiddenBottomDrawer = value);
@@ -2574,7 +2638,7 @@ const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let chart;
   set_store_value(ShowPollutant, $ShowPollutant = true, $ShowPollutant);
   set_store_value(ShowMapSetting, $ShowMapSetting = false, $ShowMapSetting);
-  set_store_value(hiddenDrawer, $hiddenDrawer = false, $hiddenDrawer);
+  set_store_value(hiddenDrawerRanking, $hiddenDrawerRanking = false, $hiddenDrawerRanking);
   set_store_value(ShowPollutantSelect, $ShowPollutantSelect = false, $ShowPollutantSelect);
   set_store_value(hiddenBottomDrawer, $hiddenBottomDrawer = true, $hiddenBottomDrawer);
   set_store_value(selectedFire, $selectedFire = "fires_viirs_24", $selectedFire);
@@ -2630,24 +2694,26 @@ const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   );
   async function getChartData(drawCoords2, drawType2) {
     const initDate = $intializationDate;
-    const response = await fetch(
-      "/apis/get_chart_data?" + new URLSearchParams({
-        action: "get-chartData",
-        freq_chart: "3dayrecent",
-        geom_data: drawCoords2,
-        interaction: drawType2,
-        run_date_chart: initDate + ".nc",
-        run_type_chart: "geos",
-        variable: "BC_MLPM25"
-      }),
-      { method: "GET" }
-    );
-    let res = await response.json();
+    let params = {
+      action: "get-chartData",
+      freq_chart: "3dayrecent",
+      geom_data: drawCoords2,
+      interaction: drawType2,
+      run_date_chart: initDate + ".nc",
+      run_type_chart: "geos",
+      variable: "BC_MLPM25"
+    };
+    let res = await axios.get(PUBLIC_BASE_API_URL, {
+      params,
+      headers: {
+        Authorization: PUBLIC_BACKEND_AUTHENTICATION
+      }
+    });
     if (res) {
-      let fetchData = res.response;
+      let fetchData = res.data.data;
       let pm25Data = fetchData.plot;
       let lables = pm25Data.map((tuple) => new Date(tuple[0]).toLocaleString("en-GB", { hour12: false }));
-      let barColors = pm25Data.map(function(tuple) {
+      pm25Data.map(function(tuple) {
         if (tuple[1] < 20) {
           return "#8b81ba";
         } else if (tuple[1] < 40) {
@@ -2662,7 +2728,6 @@ const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
           return "#ddd";
         }
       });
-      console.log(barColors);
       let pm25val = pm25Data.map((tuple) => tuple[1]);
       removeData(chart);
       addData(chart, lables, pm25val);
@@ -2672,12 +2737,19 @@ const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
         showModal = true;
       });
     }
-    console.log(res.data);
   }
   async function getStations() {
-    const response = await fetch("/apis/get_station?data=2024-01-09+11:00:00", { method: "GET" });
-    let res = await response.json();
-    let geojsons = createFeatureCollection(res.response);
+    let params = {
+      action: "get-stations",
+      obs_date: $forecastedDate + " " + $forecastedTime + ":00:00"
+    };
+    let res = await axios.get(PUBLIC_BASE_API_URL, {
+      params,
+      headers: {
+        Authorization: PUBLIC_BACKEND_AUTHENTICATION
+      }
+    });
+    let geojsons = createFeatureCollection(res.data.data);
     createMarker(map, mapboxgl, geojsons);
   }
   $$result.css.add(css);
@@ -2703,18 +2775,23 @@ const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       }
     }
     {
-      if (!$hiddenDrawer) {
-        document.querySelectorAll("#right-component").forEach((el) => el.style.right = "330px");
-        document.querySelectorAll("#timeslider").forEach((el) => el.style.justifyContent = "center");
+      if (!$hiddenDrawerRanking) {
+        setTimeout(
+          () => {
+            document.querySelectorAll("#right-component").forEach((el) => el.style.right = "330px");
+            document.querySelectorAll("#timeslider").forEach((el) => el.style.justifyContent = "center");
+          },
+          50
+        );
       }
     }
     {
-      if ($hiddenDrawer) {
+      if ($hiddenDrawerRanking) {
         document.querySelectorAll("#right-component").forEach((el) => el.style.right = "30px");
         document.querySelectorAll("#timeslider").forEach((el) => el.style.justifyContent = "center");
       }
     }
-    $$rendered = `<div id="box__home"><div class="box__info-ugm"><div class="slider">${$ShowPollutant ? `${validate_component(AirPollutants, "AirPollutants").$$render($$result, {}, {}, {})}` : ``} ${$ShowStation ? `${validate_component(StationsLayerControl, "StationsLayerControl").$$render($$result, {}, {}, {})}` : ``} ${$ShowFire ? `${validate_component(FireLayerControl, "FireLayerControl").$$render($$result, {}, {}, {})}` : ``}</div></div> <div id="right-component" class="box__tool bg-white py-2 rounded">${validate_component(LayerToggle, "LayerToggle").$$render($$result, {}, {}, {})} ${$ShowPollutantSelect ? `${validate_component(PollutantSelect, "PollutantSelect").$$render($$result, {}, {}, {})}` : ``} ${$ShowMapSetting ? `${validate_component(MapSetting, "MapSetting").$$render($$result, {}, {}, {})}` : ``}</div>  <div class="box__zoom-map"><a class="btn-plus d-flex align-items-center justify-content-center mb-1" data-svelte-h="svelte-1kv41tv"><img src="assets/img/icon/icon-plus.svg" alt=""></a> <a class="btn-minus d-flex align-items-center justify-content-center" data-svelte-h="svelte-15v47jt"><img src="assets/img/icon/icon-minus.svg" alt=""></a></div> <div class="map overflow-hidden">${validate_component(MapBox, "MapExample").$$render(
+    $$rendered = `<div id="box__home"><div class="box__info-ugm"><div class="slider">${$ShowPollutant ? `${validate_component(AirPollutants, "AirPollutants").$$render($$result, {}, {}, {})}` : ``} ${$ShowStation ? `${validate_component(StationsLayerControl, "StationsLayerControl").$$render($$result, {}, {}, {})}` : ``} ${$ShowFire ? `${validate_component(FireLayerControl, "FireLayerControl").$$render($$result, {}, {}, {})}` : ``}</div></div> <div id="right-component" class="box__tool bg-white py-2 rounded">${validate_component(LayerToggle, "LayerToggle").$$render($$result, {}, {}, {})} ${$ShowPollutantSelect ? `${validate_component(PollutantSelect, "PollutantSelect").$$render($$result, {}, {}, {})}` : ``} ${$ShowMapSetting ? `${validate_component(MapSetting, "MapSetting").$$render($$result, {}, {}, {})}` : ``}</div> <div class="box__zoom-map"><a class="btn-plus d-flex align-items-center justify-content-center mb-1" data-svelte-h="svelte-1kv41tv"><img src="assets/img/icon/icon-plus.svg" alt=""></a> <a class="btn-minus d-flex align-items-center justify-content-center" data-svelte-h="svelte-15v47jt"><img src="assets/img/icon/icon-minus.svg" alt=""></a></div> <div class="map overflow-hidden">${validate_component(MapBox, "MapExample").$$render(
       $$result,
       { map },
       {
@@ -2724,31 +2801,7 @@ const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
         }
       },
       {}
-    )}</div> <div class="absolute dateTime-position w-full flex justify-center items-stretch svelte-1mxola6">${validate_component(TimeSlider, "TimeSlider").$$render($$result, {}, {}, {})}</div> ${validate_component(AQIRanking, "AqiRanking").$$render(
-      $$result,
-      { hiddenDrawer: $hiddenDrawer },
-      {
-        hiddenDrawer: ($$value) => {
-          $hiddenDrawer = $$value;
-          $$settled = false;
-        }
-      },
-      {}
-    )} ${validate_component(BottomDrawer, "BottomDrawer").$$render(
-      $$result,
-      { hiddenDrawer: $hiddenBottomDrawer },
-      {
-        hiddenDrawer: ($$value) => {
-          $hiddenBottomDrawer = $$value;
-          $$settled = false;
-        }
-      },
-      {
-        default: () => {
-          return `<h2 class="font-meduim text-lg text-slate-700 mb-0" data-svelte-h="svelte-bf0pzk">Air quality monitoring</h2>`;
-        }
-      }
-    )} ${validate_component(Modal, "Modal").$$render(
+    )}</div> <div class="absolute dateTime-position w-full flex justify-center items-stretch svelte-1mxola6">${validate_component(TimeSlider, "TimeSlider").$$render($$result, {}, {}, {})}</div> ${validate_component(AQIRanking, "AqiRanking").$$render($$result, {}, {}, {})} ${validate_component(BottomDrawer, "BottomDrawer").$$render($$result, {}, {}, {})} ${validate_component(Modal, "Modal").$$render(
       $$result,
       { showModal },
       {
@@ -2767,11 +2820,13 @@ const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       }
     )} </div>`;
   } while (!$$settled);
-  $$unsubscribe_hiddenDrawer();
+  $$unsubscribe_hiddenDrawerRanking();
   $$unsubscribe_drawType();
   $$unsubscribe_drawCoords();
   $$unsubscribe_showChartModal();
   $$unsubscribe_pcdshow();
+  $$unsubscribe_forecastedTime();
+  $$unsubscribe_forecastedDate();
   $$unsubscribe_intializationDate();
   $$unsubscribe_selectedFire();
   $$unsubscribe_hiddenBottomDrawer();

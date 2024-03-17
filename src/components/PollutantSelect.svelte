@@ -1,7 +1,7 @@
 <script>
 
     import { CloseButton } from 'flowbite-svelte';
-    import { ShowPollutantSelect, selectedPollutant } from '../stores/app';
+    import { ShowPollutantSelect, selectedPollutant, selectedPollutantName } from '../stores/app';
     let options = [
 		{ value: 'pm25', name: 'PM2.5' },
     // { value: 'pm10', name: 'PM10' },

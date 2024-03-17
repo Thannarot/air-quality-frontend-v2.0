@@ -363,6 +363,7 @@
 
     #sidebar6 {
         top: 115px;
+        z-index: 3;
     }
 
     #header .nav-container .title-page {
